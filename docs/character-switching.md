@@ -71,16 +71,23 @@ Flat bundles (after install): `~/.cursor/sky-feather/bundles/<id>.md`
 
 Composition metadata (which files each bundle includes): `examples/cursor-*.md`
 
-## Suggested Commands (Discord Hermes)
+## Discord Hermes — switching today
+
+In-Discord `/hermes character …` is **not shipped yet** (future syntax). On the Hermes VM today:
+
+```bash
+bash scripts/switch-hermes-character.sh <id-or-alias>
+sudo systemctl restart hermes-gateway
+```
+
+See [hermes.md](hermes.md) for install, upgrades, and mode labels.
+
+### Future in-Discord syntax (design only)
 
 ```text
 /hermes character sky-feather
 /hermes character arisu
 /hermes character setsuna
-/hermes character tsubaki
-/hermes character akane
-/hermes character kaede
-/hermes character koboshi
 ```
 
 ## Task-Based Suggestions
