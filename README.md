@@ -1,4 +1,4 @@
-# sky-feather-soul-md
+# sky-feather
 
 > **Evidence-first engineering doctrine with selectable character profiles.** `CORE.md` defines the scientific-method operating standard; `characters/` defines presentation; `skills/` defines task workflows.
 
