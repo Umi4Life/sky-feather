@@ -1,10 +1,10 @@
-# Cursor Composition — Setsuna Sumeragi
+# Cursor Composition — Sumeragi Setsuna
 
 ## Load Order
 
 ```text
 CORE.md
-+ characters/setsuna-sumeragi.md
++ characters/sumeragi-setsuna.md
 + skills/architecture-review/SKILL.md
 + skills/scientific-method/SKILL.md
 ```

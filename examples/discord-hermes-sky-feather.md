@@ -37,6 +37,8 @@ Sky Feather: Architect Mode
 Sky Feather: Pair-Programming Mode
 Sky Feather: Cozy Lab Mode
 Sky Feather: Brainstorm Mode
+Sky Feather: Ops Mode
+Sky Feather: Automation Mode
 ```
 
 ## Expected Behavior

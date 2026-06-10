@@ -1,10 +1,10 @@
-# Cursor Composition — Akane Ousaka
+# Cursor Composition — Ousaka Akane
 
 ## Load Order
 
 ```text
 CORE.md
-+ characters/akane-ousaka.md
++ characters/ousaka-akane.md
 ```
 
 Add task-specific skills when moving from ideation to execution.

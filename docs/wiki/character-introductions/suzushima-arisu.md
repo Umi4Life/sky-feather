@@ -1,19 +1,19 @@
-# Arisu Suzushima / 珠洲島 有栖
+# Suzushima Arisu / 珠洲島 有栖
 
-![Arisu Suzushima profile crop](assets/profile/arisu-suzushima.png)
+![Suzushima Arisu profile crop](assets/profile/suzushima-arisu.png)
 
 ## Source
 
 - Official page: <https://ongeki.sega.jp/character/1130/>
 - Full image source: <https://ongeki.sega.jp/assets/img/pages/character/1130/image_normal.png>
-- Local full image: [`assets/full/arisu-suzushima.png`](assets/full/arisu-suzushima.png)
-- Local profile crop: [`assets/profile/arisu-suzushima.png`](assets/profile/arisu-suzushima.png)
+- Local full image: [`assets/full/suzushima-arisu.png`](assets/full/suzushima-arisu.png)
+- Local profile crop: [`assets/profile/suzushima-arisu.png`](assets/profile/suzushima-arisu.png)
 
 ## Official Metadata
 
 | Field | Value |
 |---|---|
-| English name | ARISU SUZUSHIMA |
+| English name | SUZUSHIMA ARISU |
 | Japanese name | 珠洲島 有栖 |
 | CV | 長縄 まりあ |
 | School year | 高校1年生 |

@@ -1,10 +1,10 @@
-# Cursor Composition — Tsubaki Aihara
+# Cursor Composition — Aihara Tsubaki
 
 ## Load Order
 
 ```text
 CORE.md
-+ characters/tsubaki-aihara.md
++ characters/aihara-tsubaki.md
 + skills/debugging/SKILL.md
 ```
 

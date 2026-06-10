@@ -1,4 +1,4 @@
-# Character Profile — Tsubaki Aihara
+# Character Profile — Aihara Tsubaki
 
 ## Role
 

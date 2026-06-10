@@ -15,9 +15,20 @@ CORE.md
 This resolves two use cases:
 
 - **Discord Hermes** can remain publicly branded as **Sky Feather**.
-- **Cursor / coding agents** can fully switch character profiles, including Sky Feather, Arisu, Setsuna, Tsubaki, and Akane.
+- **Cursor / coding agents** can fully switch character profiles, including Sky Feather, Suzushima Arisu, Sumeragi Setsuna, Aihara Tsubaki, Ousaka Akane, Kujo Kaede, and Inohara Koboshi.
 
 `SOUL.md` remains as the historical single-file Sky Feather reference. New compositions should prefer `CORE.md + characters/*.md + skills/*/SKILL.md`.
+
+### V3.1 — Kaede & Koboshi
+
+V3.1 adds two utility character profiles with no architectural changes:
+
+| Profile | Niche |
+|---|---|
+| Kujo Kaede | operational rigor, maintenance discipline, postmortem mindset |
+| Inohara Koboshi | automation, developer experience, workflow optimization |
+
+Core characters remain Sky Feather, Suzushima Arisu, Sumeragi Setsuna, Aihara Tsubaki, and Ousaka Akane.
 
 ---
 
@@ -66,7 +77,7 @@ Outcomes you should expect:
 |------|---------|
 | [CORE.md](CORE.md) | Durable character-neutral engineering doctrine |
 | [SOUL.md](SOUL.md) | Historical single-file Sky Feather reference |
-| [characters/](characters/) | Character profiles: Sky Feather, Arisu, Setsuna, Tsubaki, Akane |
+| [characters/](characters/) | Character profiles: Sky Feather, Suzushima Arisu, Sumeragi Setsuna, Aihara Tsubaki, Ousaka Akane, Kujo Kaede, Inohara Koboshi |
 | [skills/](skills/) | Workflow modules: scientific method, debugging, architecture review, journal, GSD |
 | [examples/](examples/) | Runtime composition examples for Discord Hermes and Cursor |
 | [docs/runtime-composition.md](docs/runtime-composition.md) | How CORE + character profiles + skills compose |
@@ -82,10 +93,12 @@ Outcomes you should expect:
 | Profile | Best for | Cursor example |
 |---|---|---|
 | Sky Feather | general engineering, Discord Hermes, homelab, blogging | [examples/cursor-sky-feather.md](examples/cursor-sky-feather.md) |
-| Arisu Suzushima | cozy lab, experiments, tinkering | [examples/cursor-arisu.md](examples/cursor-arisu.md) |
-| Setsuna Sumeragi | architecture review, RFC critique, planning | [examples/cursor-setsuna.md](examples/cursor-setsuna.md) |
-| Tsubaki Aihara | pair programming, debugging, code review | [examples/cursor-tsubaki.md](examples/cursor-tsubaki.md) |
-| Akane Ousaka | brainstorming, ideation, ambitious planning | [examples/cursor-akane.md](examples/cursor-akane.md) |
+| Suzushima Arisu | cozy lab, experiments, tinkering | [examples/cursor-suzushima-arisu.md](examples/cursor-suzushima-arisu.md) |
+| Sumeragi Setsuna | architecture review, RFC critique, planning | [examples/cursor-sumeragi-setsuna.md](examples/cursor-sumeragi-setsuna.md) |
+| Aihara Tsubaki | pair programming, debugging, code review | [examples/cursor-aihara-tsubaki.md](examples/cursor-aihara-tsubaki.md) |
+| Ousaka Akane | brainstorming, ideation, ambitious planning | [examples/cursor-ousaka-akane.md](examples/cursor-ousaka-akane.md) |
+| Kujo Kaede | ops review, cleanup, postmortems, reliability | [examples/cursor-kaede.md](examples/cursor-kaede.md) |
+| Inohara Koboshi | automation, scripting, CI/CD, workflow optimization | [examples/cursor-koboshi.md](examples/cursor-koboshi.md) |
 
 Character profiles may change tone, phrasing, humor, emotional posture, and catchphrases.
 
@@ -117,6 +130,8 @@ Sky Feather: Architect Mode
 Sky Feather: Pair-Programming Mode
 Sky Feather: Cozy Lab Mode
 Sky Feather: Brainstorm Mode
+Sky Feather: Ops Mode
+Sky Feather: Automation Mode
 ```
 
 See [examples/discord-hermes-sky-feather.md](examples/discord-hermes-sky-feather.md).
@@ -127,7 +142,7 @@ See [examples/discord-hermes-sky-feather.md](examples/discord-hermes-sky-feather
 
 1. Clone this repo somewhere on your machine.
 2. Follow [docs/cursor.md](docs/cursor.md).
-3. Choose a composition file from [examples/](examples/), such as [examples/cursor-sky-feather.md](examples/cursor-sky-feather.md) or [examples/cursor-setsuna.md](examples/cursor-setsuna.md).
+3. Choose a composition file from [examples/](examples/), such as [examples/cursor-sky-feather.md](examples/cursor-sky-feather.md) or [examples/cursor-sumeragi-setsuna.md](examples/cursor-sumeragi-setsuna.md).
 4. Start a new chat and ask a technical question.
 5. Verify that the engineering conclusion remains evidence-first while the delivery style matches the selected character.
 

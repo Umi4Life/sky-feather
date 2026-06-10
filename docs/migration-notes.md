@@ -86,10 +86,10 @@ characters/sky-feather.md
 Create:
 
 ```text
-characters/arisu-suzushima.md
-characters/setsuna-sumeragi.md
-characters/tsubaki-aihara.md
-characters/akane-ousaka.md
+characters/suzushima-arisu.md
+characters/sumeragi-setsuna.md
+characters/aihara-tsubaki.md
+characters/ousaka-akane.md
 ```
 
 ### Phase 5 — Move Workflows Into Skills
@@ -117,6 +117,19 @@ Expected result:
 - same engineering conclusion
 - same evidence standards
 - different tone
+
+### Phase 8 — V3.1 Utility Characters
+
+Add:
+
+```text
+characters/kujo-kaede.md
+characters/inohara-koboshi.md
+examples/cursor-kaede.md
+examples/cursor-koboshi.md
+```
+
+No architectural changes. Utility profiles fill ops/maintenance and automation/DX niches.
 
 ## Migration Risk
 

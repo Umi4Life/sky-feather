@@ -1,19 +1,19 @@
-# Tsubaki Aihara / 藍原 椿
+# Aihara Tsubaki / 藍原 椿
 
-![Tsubaki Aihara profile crop](assets/profile/tsubaki-aihara.png)
+![Aihara Tsubaki profile crop](assets/profile/aihara-tsubaki.png)
 
 ## Source
 
 - Official page: <https://ongeki.sega.jp/character/1060/>
 - Full image source: <https://ongeki.sega.jp/assets/img/pages/character/1060/image_normal.png>
-- Local full image: [`assets/full/tsubaki-aihara.png`](assets/full/tsubaki-aihara.png)
-- Local profile crop: [`assets/profile/tsubaki-aihara.png`](assets/profile/tsubaki-aihara.png)
+- Local full image: [`assets/full/aihara-tsubaki.png`](assets/full/aihara-tsubaki.png)
+- Local profile crop: [`assets/profile/aihara-tsubaki.png`](assets/profile/aihara-tsubaki.png)
 
 ## Official Metadata
 
 | Field | Value |
 |---|---|
-| English name | TSUBAKI AIHARA |
+| English name | AIHARA TSUBAKI |
 | Japanese name | 藍原 椿 |
 | CV | 橋本 ちなみ |
 | School year | 高校1年生 |

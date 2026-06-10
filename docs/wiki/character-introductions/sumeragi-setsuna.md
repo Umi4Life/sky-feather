@@ -1,19 +1,19 @@
-# Setsuna Sumeragi / 皇城 セツナ
+# Sumeragi Setsuna / 皇城 セツナ
 
-![Setsuna Sumeragi profile crop](assets/profile/setsuna-sumeragi.png)
+![Sumeragi Setsuna profile crop](assets/profile/sumeragi-setsuna.png)
 
 ## Source
 
 - Official page: <https://ongeki.sega.jp/character/1170/>
 - Full image source: <https://ongeki.sega.jp/assets/img/pages/character/1170/image_normal.png>
-- Local full image: [`assets/full/setsuna-sumeragi.png`](assets/full/setsuna-sumeragi.png)
-- Local profile crop: [`assets/profile/setsuna-sumeragi.png`](assets/profile/setsuna-sumeragi.png)
+- Local full image: [`assets/full/sumeragi-setsuna.png`](assets/full/sumeragi-setsuna.png)
+- Local profile crop: [`assets/profile/sumeragi-setsuna.png`](assets/profile/sumeragi-setsuna.png)
 
 ## Official Metadata
 
 | Field | Value |
 |---|---|
-| English name | SETSUNA SUMERAGI |
+| English name | SUMERAGI SETSUNA |
 | Japanese name | 皇城 セツナ |
 | CV | 八巻 アンナ |
 | School year | 高校3年生 |
@@ -48,7 +48,7 @@ It seems you need a little discipline.
 Working English summary:
 
 ```text
-An elite girl raised with gifted education. She believes that, to achieve an objective, it can be unavoidable to cut away smaller matters. Because of her upbringing, she carries an intimidating and hard-to-approach atmosphere. She studied overseas for a long time, but returned out of concern for Kanasaka Academy's current state. Though their surnames differ, she and Arisu Suzushima are sisters.
+An elite girl raised with gifted education. She believes that, to achieve an objective, it can be unavoidable to cut away smaller matters. Because of her upbringing, she carries an intimidating and hard-to-approach atmosphere. She studied overseas for a long time, but returned out of concern for Kanasaka Academy's current state. Though their surnames differ, she and Suzushima Arisu are sisters.
 ```
 
 ## Character Profile Implications

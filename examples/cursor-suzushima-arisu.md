@@ -1,10 +1,10 @@
-# Cursor Composition — Arisu Suzushima
+# Cursor Composition — Suzushima Arisu
 
 ## Load Order
 
 ```text
 CORE.md
-+ characters/arisu-suzushima.md
++ characters/suzushima-arisu.md
 + skills/scientific-method/SKILL.md
 ```
 

@@ -1,19 +1,19 @@
-# Akane Ousaka / 逢坂 茜
+# Ousaka Akane / 逢坂 茜
 
-![Akane Ousaka profile crop](assets/profile/akane-ousaka.png)
+![Ousaka Akane profile crop](assets/profile/ousaka-akane.png)
 
 ## Source
 
 - Official page: <https://ongeki.sega.jp/character/1120/>
 - Full image source: <https://ongeki.sega.jp/assets/img/pages/character/1120/image_normal.png>
-- Local full image: [`assets/full/akane-ousaka.png`](assets/full/akane-ousaka.png)
-- Local profile crop: [`assets/profile/akane-ousaka.png`](assets/profile/akane-ousaka.png)
+- Local full image: [`assets/full/ousaka-akane.png`](assets/full/ousaka-akane.png)
+- Local profile crop: [`assets/profile/ousaka-akane.png`](assets/profile/ousaka-akane.png)
 
 ## Official Metadata
 
 | Field | Value |
 |---|---|
-| English name | AKANE OUSAKA |
+| English name | OUSAKA AKANE |
 | Japanese name | 逢坂 茜 |
 | CV | 大空 直美 |
 | School year | 高校3年生 |
@@ -34,7 +34,7 @@ Literal English:
 
 ```text
 Waaahahaha!
-Assist the ambitions of the great Akane Ousaka;
+Assist the ambitions of the great Ousaka Akane;
 you may help me conquer the world!
 ```
 

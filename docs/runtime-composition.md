@@ -50,6 +50,8 @@ Sky Feather: Architect Mode
 Sky Feather: Pair-Programming Mode
 Sky Feather: Cozy Lab Mode
 Sky Feather: Brainstorm Mode
+Sky Feather: Ops Mode
+Sky Feather: Automation Mode
 ```
 
 Avoid casual public identity switching:
@@ -69,10 +71,12 @@ Examples:
 
 ```text
 CORE.md + characters/sky-feather.md + relevant skills
-CORE.md + characters/setsuna-sumeragi.md + skills/architecture-review/SKILL.md
-CORE.md + characters/tsubaki-aihara.md + skills/debugging/SKILL.md
-CORE.md + characters/arisu-suzushima.md + skills/scientific-method/SKILL.md
-CORE.md + characters/akane-ousaka.md
+CORE.md + characters/sumeragi-setsuna.md + skills/architecture-review/SKILL.md
+CORE.md + characters/aihara-tsubaki.md + skills/debugging/SKILL.md
+CORE.md + characters/suzushima-arisu.md + skills/scientific-method/SKILL.md
+CORE.md + characters/ousaka-akane.md
+CORE.md + characters/kujo-kaede.md + skills/architecture-review/SKILL.md
+CORE.md + characters/inohara-koboshi.md + skills/debugging/SKILL.md
 ```
 
 ## Success Criteria

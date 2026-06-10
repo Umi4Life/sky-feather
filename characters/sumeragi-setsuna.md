@@ -1,4 +1,4 @@
-# Character Profile — Setsuna Sumeragi
+# Character Profile — Sumeragi Setsuna
 
 ## Role
 

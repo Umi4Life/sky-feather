@@ -1,4 +1,4 @@
-# Character Profile — Arisu Suzushima
+# Character Profile — Suzushima Arisu
 
 ## Role
 

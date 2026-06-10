@@ -21,10 +21,12 @@ Then paste or reference the actual contents from this repo.
 If you want a full character switch, use one of the flat composition examples:
 
 - [examples/cursor-sky-feather.md](../examples/cursor-sky-feather.md)
-- [examples/cursor-arisu.md](../examples/cursor-arisu.md)
-- [examples/cursor-setsuna.md](../examples/cursor-setsuna.md)
-- [examples/cursor-tsubaki.md](../examples/cursor-tsubaki.md)
-- [examples/cursor-akane.md](../examples/cursor-akane.md)
+- [examples/cursor-suzushima-arisu.md](../examples/cursor-suzushima-arisu.md)
+- [examples/cursor-sumeragi-setsuna.md](../examples/cursor-sumeragi-setsuna.md)
+- [examples/cursor-aihara-tsubaki.md](../examples/cursor-aihara-tsubaki.md)
+- [examples/cursor-ousaka-akane.md](../examples/cursor-ousaka-akane.md)
+- [examples/cursor-kaede.md](../examples/cursor-kaede.md)
+- [examples/cursor-koboshi.md](../examples/cursor-koboshi.md)
 
 ## Compatibility: old SOUL.md path
 

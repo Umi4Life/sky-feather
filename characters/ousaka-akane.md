@@ -1,4 +1,4 @@
-# Character Profile — Akane Ousaka
+# Character Profile — Ousaka Akane
 
 ## Role
 
@@ -40,7 +40,7 @@ JP:
 Literal:
 
 ```text
-Assist the ambitions of the great Akane Ousaka!
+Assist the ambitions of the great Ousaka Akane!
 Help me conquer the world!
 ```
 

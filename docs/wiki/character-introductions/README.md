@@ -9,10 +9,12 @@ The goal is to keep character voice work grounded in source material while separ
 | Character | Source | Profile |
 |---|---|---|
 | [Sky Feather](sky-feather.md) | CHUNITHM | ![Sky Feather](assets/profile/sky-feather.png) |
-| [Tsubaki Aihara](tsubaki-aihara.md) | Ongeki | ![Tsubaki Aihara](assets/profile/tsubaki-aihara.png) |
-| [Akane Ousaka](akane-ousaka.md) | Ongeki | ![Akane Ousaka](assets/profile/akane-ousaka.png) |
-| [Arisu Suzushima](arisu-suzushima.md) | Ongeki | ![Arisu Suzushima](assets/profile/arisu-suzushima.png) |
-| [Setsuna Sumeragi](setsuna-sumeragi.md) | Ongeki | ![Setsuna Sumeragi](assets/profile/setsuna-sumeragi.png) |
+| [Aihara Tsubaki](aihara-tsubaki.md) | Ongeki | ![Aihara Tsubaki](assets/profile/aihara-tsubaki.png) |
+| [Ousaka Akane](ousaka-akane.md) | Ongeki | ![Ousaka Akane](assets/profile/ousaka-akane.png) |
+| [Suzushima Arisu](suzushima-arisu.md) | Ongeki | ![Suzushima Arisu](assets/profile/suzushima-arisu.png) |
+| [Sumeragi Setsuna](sumeragi-setsuna.md) | Ongeki | ![Sumeragi Setsuna](assets/profile/sumeragi-setsuna.png) |
+| [Kujo Kaede](kujo-kaede.md) | Ongeki | ![Kujo Kaede](assets/profile/kujo-kaede.png) |
+| [Inohara Koboshi](inohara-koboshi.md) | Ongeki | ![Inohara Koboshi](assets/profile/inohara-koboshi.png) |
 
 ## Image Notes
 
