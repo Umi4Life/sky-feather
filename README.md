@@ -72,6 +72,7 @@ Outcomes you should expect:
 | [docs/runtime-composition.md](docs/runtime-composition.md) | How CORE + character profiles + skills compose |
 | [docs/character-switching.md](docs/character-switching.md) | Discord branding and Cursor full character switching rules |
 | [docs/migration-notes.md](docs/migration-notes.md) | V3 migration notes from single SOUL.md |
+| [docs/wiki/character-introductions/](docs/wiki/character-introductions/) | Official-source character introduction wiki and profile crops |
 | [scripts/install-cursor-local.sh](scripts/install-cursor-local.sh) | Mirror materials into `~/.cursor/sky-feather/` |
 
 ---

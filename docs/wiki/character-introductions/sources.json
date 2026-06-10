@@ -1,0 +1,31 @@
+{
+  "sky-feather": {
+    "name_jp": "スカイフェザー",
+    "source_page": "https://chunithm.sega.jp/character/#/chunithm/%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%95%E3%82%A7%E3%82%B6%E3%83%BC",
+    "image_source": "https://chunithm.sega.jp/storage/chara/chunithm/illustration/cs11.webp?_=20251210.153647"
+  },
+  "tsubaki-aihara": {
+    "name_en": "TSUBAKI AIHARA",
+    "name_jp": "藍原 椿",
+    "source_page": "https://ongeki.sega.jp/character/1060/",
+    "image_source": "https://ongeki.sega.jp/assets/img/pages/character/1060/image_normal.png"
+  },
+  "akane-ousaka": {
+    "name_en": "AKANE OUSAKA",
+    "name_jp": "逢坂 茜",
+    "source_page": "https://ongeki.sega.jp/character/1120/",
+    "image_source": "https://ongeki.sega.jp/assets/img/pages/character/1120/image_normal.png"
+  },
+  "arisu-suzushima": {
+    "name_en": "ARISU SUZUSHIMA",
+    "name_jp": "珠洲島 有栖",
+    "source_page": "https://ongeki.sega.jp/character/1130/",
+    "image_source": "https://ongeki.sega.jp/assets/img/pages/character/1130/image_normal.png"
+  },
+  "setsuna-sumeragi": {
+    "name_en": "SETSUNA SUMERAGI",
+    "name_jp": "皇城 セツナ",
+    "source_page": "https://ongeki.sega.jp/character/1170/",
+    "image_source": "https://ongeki.sega.jp/assets/img/pages/character/1170/image_normal.png"
+  }
+}
