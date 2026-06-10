@@ -15,10 +15,7 @@ MIRROR="$(sf_sky_feather_mirror)"
 SKILL_DIR="$(sf_skill_character_dir)"
 COMMANDS_DIR="$(sf_commands_dir)"
 BUNDLES_DIR="${MIRROR}/bundles"
-DEFAULT_CHAR="sky-feather"
-if command -v jq >/dev/null 2>&1; then
-  DEFAULT_CHAR="$(jq -r '.default' "$(sf_characters_json)")"
-fi
+DEFAULT_CHAR="$(sf_json_default_character)"
 
 echo "Installing Sky Feather V3.2 global Cursor setup"
 echo "  Repo:   ${REPO_ROOT}"
@@ -51,11 +48,9 @@ sf_build_all_bundles "${REPO_ROOT}" "${BUNDLES_DIR}"
 
 # Active character: preserve from manifest if exists, else default
 ACTIVE_CHAR="${DEFAULT_CHAR}"
-if [[ -f "${MIRROR}/manifest.json" ]] && command -v jq >/dev/null 2>&1; then
-  existing="$(jq -r '.active // empty' "${MIRROR}/manifest.json")"
-  if [[ -n "${existing}" && -f "${BUNDLES_DIR}/${existing}.md" ]]; then
-    ACTIVE_CHAR="${existing}"
-  fi
+existing="$(sf_json_manifest_active "${MIRROR}/manifest.json")"
+if [[ -n "${existing}" && -f "${BUNDLES_DIR}/${existing}.md" ]]; then
+  ACTIVE_CHAR="${existing}"
 fi
 
 cp "${BUNDLES_DIR}/${ACTIVE_CHAR}.md" "${MIRROR}/active-bundle.md"

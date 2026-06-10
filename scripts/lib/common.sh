@@ -71,30 +71,119 @@ sf_list_character_ids() {
   fi
 }
 
+sf_json_default_character() {
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.default' "$(sf_characters_json)"
+  else
+    grep '"default"' "$(sf_characters_json)" | sed 's/.*"default": *"\([^"]*\)".*/\1/'
+  fi
+}
+
+sf_json_manifest_active() {
+  local manifest="$1"
+  if [[ ! -f "${manifest}" ]]; then
+    return 0
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.active // empty' "${manifest}"
+  else
+    grep '"active"' "${manifest}" | sed 's/.*"active": *"\([^"]*\)".*/\1/'
+  fi
+}
+
+# Fallback when jq is unavailable (e.g. minimal Hermes VM without apt extras).
+_sf_get_character_field_no_jq() {
+  local id="$1"
+  local field="$2"
+  local json_file
+  json_file="$(sf_characters_json)"
+
+  if command -v python3 >/dev/null 2>&1; then
+    python3 - "${id}" "${field}" "${json_file}" <<'PY'
+import json, sys
+char_id, field, path = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(path, encoding="utf-8") as f:
+    data = json.load(f)
+for c in data.get("characters", []):
+    if c.get("id") == char_id:
+        v = c.get(field)
+        if isinstance(v, list):
+            print(",".join(v))
+        elif v is not None:
+            print(v)
+        break
+PY
+    return 0
+  fi
+
+  local block
+  block="$(sed -n "/\"id\": \"${id}\"/,/\"id\": \"/p" "${json_file}" | sed '$d')"
+  if [[ -z "${block}" ]]; then
+    block="$(sed -n "/\"id\": \"${id}\"/,/^  \}/p" "${json_file}")"
+  fi
+  if [[ -z "${block}" ]]; then
+    echo "error: character not found: ${id}" >&2
+    exit 1
+  fi
+  case "${field}" in
+    name)
+      grep '"name":' <<< "${block}" | sed 's/.*"name": "\([^"]*\)".*/\1/' | head -n 1
+      ;;
+    file)
+      grep '"file":' <<< "${block}" | sed 's/.*"file": "\([^"]*\)".*/\1/' | head -n 1
+      ;;
+    skills)
+      grep '"skills":' <<< "${block}" | sed 's/.*"skills": \[\([^]]*\)\].*/\1/' | tr -d '"' | tr -d ' '
+      ;;
+    *)
+      echo "error: unsupported field without jq: ${field}" >&2
+      exit 1
+      ;;
+  esac
+}
+
 sf_get_character_field() {
   local id="$1"
   local field="$2"
-  local json
+  local json value
   json="$(sf_read_characters_config)"
   if command -v jq >/dev/null 2>&1; then
     printf '%s' "${json}" | jq -r --arg id "${id}" --arg f "${field}" '
       .characters[] | select(.id == $id) | .[$f]
     '
-  else
-    echo "error: jq is required for field lookup; install jq or use PowerShell scripts" >&2
+    return 0
+  fi
+
+  value="$(_sf_get_character_field_no_jq "${id}" "${field}")"
+  if [[ -z "${value}" ]]; then
+    echo "error: character not found or missing field ${field}: ${id}" >&2
     exit 1
   fi
+  printf '%s' "${value}"
+}
+
+sf_list_character_skills() {
+  local char_id="$1"
+  local skills_csv skill
+  skills_csv="$(sf_get_character_field "${char_id}" skills)"
+  if command -v jq >/dev/null 2>&1; then
+    printf '%s' "${skills_csv}" | jq -r '.[]'
+    return 0
+  fi
+  IFS=',' read -ra _skills <<< "${skills_csv}"
+  for skill in "${_skills[@]}"; do
+    [[ -n "${skill}" ]] && printf '%s\n' "${skill}"
+  done
 }
 
 sf_build_bundle_file() {
   local repo_root="$1"
   local output_dir="$2"
   local char_id="$3"
-  local name file skills_json skill skill_path bundle_path
+  local name file skill skill_path bundle_path
 
   name="$(sf_get_character_field "${char_id}" name)"
   file="$(sf_get_character_field "${char_id}" file)"
-  skills_json="$(sf_get_character_field "${char_id}" skills)"
 
   bundle_path="${output_dir}/${char_id}.md"
   mkdir -p "${output_dir}"
@@ -134,7 +223,7 @@ sf_build_bundle_file() {
       echo ""
       echo "---"
       echo ""
-    done < <(printf '%s' "${skills_json}" | jq -r '.[]')
+    done < <(sf_list_character_skills "${char_id}")
   } > "${bundle_path}"
 
   printf '%s' "${bundle_path}"
@@ -209,8 +298,14 @@ sf_hermes_soul_max_chars() {
 
 sf_hermes_discord_label() {
   local char_id="$1"
+  local label
   if command -v jq >/dev/null 2>&1; then
     jq -r --arg id "${char_id}" '.discordLabels[$id] // $id' "$(sf_hermes_paths_json)"
+    return 0
+  fi
+  label="$(grep "\"${char_id}\":" "$(sf_hermes_paths_json)" 2>/dev/null | sed 's/.*: *"\([^"]*\)".*/\1/' | head -n 1)"
+  if [[ -n "${label}" ]]; then
+    printf '%s' "${label}"
   else
     printf '%s' "${char_id}"
   fi

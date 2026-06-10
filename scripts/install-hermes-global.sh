@@ -41,10 +41,7 @@ done
 HERMES_HOME="$(sf_hermes_home)"
 MIRROR="$(sf_hermes_mirror)"
 SOUL_PATH="$(sf_hermes_soul_path)"
-DEFAULT_CHAR="sky-feather"
-if command -v jq >/dev/null 2>&1; then
-  DEFAULT_CHAR="$(jq -r '.default' "$(sf_characters_json)")"
-fi
+DEFAULT_CHAR="$(sf_json_default_character)"
 
 echo "Installing Sky Feather on Hermes"
 echo "  Repo:        ${REPO_ROOT}"
@@ -75,11 +72,9 @@ cp "${SCRIPT_DIR}/lib/characters.json" "${MIRROR}/scripts-lib/characters.json"
 cp "${SCRIPT_DIR}/lib/hermes-paths.json" "${MIRROR}/scripts-lib/hermes-paths.json"
 
 ACTIVE_CHAR="${DEFAULT_CHAR}"
-if [[ -f "${MIRROR}/manifest.json" ]] && command -v jq >/dev/null 2>&1; then
-  existing="$(jq -r '.active // empty' "${MIRROR}/manifest.json")"
-  if [[ -n "${existing}" ]]; then
-    ACTIVE_CHAR="${existing}"
-  fi
+existing="$(sf_json_manifest_active "${MIRROR}/manifest.json")"
+if [[ -n "${existing}" ]]; then
+  ACTIVE_CHAR="${existing}"
 fi
 
 sf_build_hermes_soul_file "${REPO_ROOT}" "${SOUL_PATH}" "${ACTIVE_CHAR}"

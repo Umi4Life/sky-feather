@@ -34,8 +34,8 @@ On the Hermes VM:
 
 ```bash
 # 1. Clone the repo (first time only — gives you source control + upgrade path)
-git clone https://github.com/Umi4Life/sky-feather-soul-md.git
-cd sky-feather-soul-md
+git clone https://github.com/Umi4Life/sky-feather.git
+cd sky-feather
 
 # 2. Install V3.2 (backs up existing SOUL.md automatically)
 chmod +x scripts/install-hermes-global.sh
@@ -56,11 +56,13 @@ What the installer does:
 ### Future upgrades
 
 ```bash
-cd ~/sky-feather-soul-md   # or wherever you cloned
+cd ~/sky-feather   # or wherever you cloned
 git pull
 ./scripts/install-hermes-global.sh
 sudo systemctl restart hermes
 ```
+
+`jq` is optional — install scripts use awk/grep fallbacks when it is not installed.
 
 No more hand-copying `SOUL.md`.
 
