@@ -154,7 +154,7 @@ Print Discord preset key without writing SOUL:
 bash scripts/switch-hermes-character.sh setsuna --personality-only
 ```
 
-**There is no in-Discord `/hermes character` command yet** (Route C roadmap). See [hermes-discord-personality-handoff.md](hermes-discord-personality-handoff.md).
+**There is no in-Discord `/hermes character` command yet** (Route C — see [roadmap.md](roadmap.md)).
 
 See [character-switching.md](character-switching.md) for the full mode table and branding rules.
 
@@ -243,7 +243,7 @@ ls -la ~/.hermes/SOUL.md ~/.hermes/config.yaml ~/.hermes/sky-feather/manifest.js
 
 ## Related docs
 
-- [hermes-discord-personality-handoff.md](hermes-discord-personality-handoff.md) — Route B implementation notes + Route C roadmap
+- [roadmap.md](roadmap.md) — shipped work, planned initiatives, VM validation log
 - [character-switching.md](character-switching.md) — mode table + branding rules
 - [runtime-composition.md](runtime-composition.md) — CORE + character + skills model
 - [migration-notes.md](migration-notes.md) — V1 SOUL.md → V3 framework history
