@@ -60,6 +60,8 @@ Write-SfSkillFile -CharacterId $activeChar -BundlePath $activeBundle -SkillDir $
 $commandTemplate = Join-Path $PSScriptRoot 'templates\character-command.md'
 Copy-Item $commandTemplate (Join-Path $commandsDir 'character.md') -Force
 
+Sync-SfGlobalBin -RepoScriptsDir $PSScriptRoot
+
 Write-Host ''
 Write-Host 'Installed V3.2 materials:'
 Write-Host "  $mirror\"
@@ -67,6 +69,7 @@ Write-Host "  $bundlesDir\"
 Write-Host "  $activeBundle"
 Write-Host "  $(Join-Path $skillDir 'SKILL.md')"
 Write-Host "  $(Join-Path $commandsDir 'character.md')"
+Write-Host "  $(Get-SfGlobalSwitchScriptPs1)"
 Write-Host ''
 Write-Host "Active character: $activeChar"
 

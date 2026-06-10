@@ -19,6 +19,18 @@ function Get-SfSkyFeatherMirror {
     return Join-Path (Get-SfCursorHome) 'sky-feather'
 }
 
+function Get-SfGlobalBinDir {
+    return Join-Path (Get-SfSkyFeatherMirror) 'bin'
+}
+
+function Get-SfGlobalSwitchScriptPs1 {
+    return Join-Path (Get-SfGlobalBinDir) 'switch-character.ps1'
+}
+
+function Get-SfGlobalSwitchScriptSh {
+    return Join-Path (Get-SfGlobalBinDir) 'switch-character.sh'
+}
+
 function Get-SfSkillCharacterDir {
     return Join-Path (Get-SfCursorHome) 'skills\sky-feather-character'
 }

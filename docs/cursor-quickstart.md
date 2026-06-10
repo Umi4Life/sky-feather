@@ -7,7 +7,7 @@ One-page cheat sheet for Sky Feather V3.2 global Cursor setup. Full guide: [curs
 | Action | macOS / Linux / Git Bash | Windows PowerShell | Windows cmd |
 |--------|--------------------------|--------------------|-------------|
 | Install | `./scripts/install-cursor-global.sh` | `.\scripts\install-cursor-global.ps1` | `scripts\install-cursor-global.cmd` |
-| Switch | `./scripts/switch-character.sh <id>` | `.\scripts\switch-character.ps1 <id>` | `scripts\switch-character.cmd <id>` |
+| Switch (any workspace) | `"$HOME/.cursor/sky-feather/bin/switch-character.sh" <id>` | `powershell -File "$env:USERPROFILE\.cursor\sky-feather\bin\switch-character.ps1" <id>` | `%USERPROFILE%\.cursor\sky-feather\bin\switch-character.cmd <id>` |
 | Update | `git pull && ./scripts/install-cursor-global.sh` | `git pull; .\scripts\install-cursor-global.ps1` | `git pull` then `scripts\install-cursor-global.cmd` |
 | Uninstall (preview) | `./scripts/uninstall-cursor-global.sh --dry-run` | `.\scripts\uninstall-cursor-global.ps1 -DryRun` | `scripts\uninstall-cursor-global.cmd -DryRun` |
 | Uninstall (all) | `./scripts/uninstall-cursor-global.sh --all` | `.\scripts\uninstall-cursor-global.ps1` | `scripts\uninstall-cursor-global.cmd` |

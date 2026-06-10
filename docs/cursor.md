@@ -109,17 +109,29 @@ After pasting, start a **new** Cursor chat.
 
 ## Switch character
 
-```bash
-# macOS / Linux / Git Bash
-./scripts/switch-character.sh sumeragi-setsuna
-./scripts/switch-character.sh setsuna    # alias
-```
+**Preferred — global script (any workspace):**
 
 ```powershell
 # Windows PowerShell
-.\scripts\switch-character.ps1 sumeragi-setsuna
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.cursor\sky-feather\bin\switch-character.ps1" sumeragi-setsuna
+```
+
+```bash
+# macOS / Linux / Git Bash
+"$HOME/.cursor/sky-feather/bin/switch-character.sh" sumeragi-setsuna
+```
+
+**From repo clone (also works):**
+
+```bash
+./scripts/switch-character.sh setsuna
+```
+
+```powershell
 .\scripts\switch-character.ps1 setsuna
 ```
+
+`/character` slash command uses the global path. Agents must **not** edit switch scripts if a run fails — re-run `install-cursor-global` instead.
 
 Character IDs and aliases: [cursor-quickstart.md](cursor-quickstart.md#character-ids).
 

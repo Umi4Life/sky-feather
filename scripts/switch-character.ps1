@@ -1,6 +1,7 @@
-# Switch active global Cursor character profile.
+# Switch active global Cursor character profile (Windows PowerShell).
 param(
-    [Parameter(Mandatory)][string]$Character
+    [Parameter(Mandatory, Position = 0)]
+    [string]$Character
 )
 
 $ErrorActionPreference = 'Stop'

@@ -3,7 +3,29 @@
 . (Join-Path $PSScriptRoot 'paths.ps1')
 
 function Get-SfCharactersJsonPath {
+    $globalJson = Join-Path (Get-SfSkyFeatherMirror) 'scripts-lib\characters.json'
+    if (Test-Path $globalJson) {
+        return $globalJson
+    }
     return Join-Path (Get-SfScriptsDir) 'lib\characters.json'
+}
+
+function Sync-SfGlobalBin {
+    param([Parameter(Mandatory)][string]$RepoScriptsDir)
+
+    $binDir = Get-SfGlobalBinDir
+    New-Item -ItemType Directory -Force -Path $binDir | Out-Null
+
+    foreach ($name in @('switch-character.ps1', 'switch-character.cmd', 'switch-character.sh')) {
+        $src = Join-Path $RepoScriptsDir $name
+        if (Test-Path $src) {
+            Copy-Item $src (Join-Path $binDir $name) -Force
+        }
+    }
+
+    $libDest = Join-Path $binDir 'lib'
+    if (Test-Path $libDest) { Remove-Item $libDest -Recurse -Force }
+    Copy-Item (Join-Path $RepoScriptsDir 'lib') $libDest -Recurse -Force
 }
 
 function Get-SfCharactersConfig {

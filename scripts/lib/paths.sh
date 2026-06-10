@@ -25,6 +25,14 @@ sf_sky_feather_mirror() {
   printf '%s/sky-feather' "$(sf_cursor_home)"
 }
 
+sf_global_bin_dir() {
+  printf '%s/bin' "$(sf_sky_feather_mirror)"
+}
+
+sf_global_switch_script_sh() {
+  printf '%s/switch-character.sh' "$(sf_global_bin_dir)"
+}
+
 sf_skill_character_dir() {
   printf '%s/skills/sky-feather-character' "$(sf_cursor_home)"
 }
