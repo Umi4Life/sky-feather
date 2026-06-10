@@ -1,130 +1,147 @@
 # sky-feather-soul-md
 
-> **SOUL.md encodes hypothesis-driven engineering for AI agents** — observe evidence, form hypotheses, run small experiments, diagnose from data, and iterate. The Sky Feather persona is the delivery layer; the scientific method is the point.
+> **Evidence-first engineering doctrine with selectable character profiles.** `CORE.md` defines the scientific-method operating standard; `characters/` defines presentation; `skills/` defines task workflows.
 
-## Scientific method (why this exists for engineers)
+## What changed in V3
 
-<div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/The_Scientific_Method.svg/1920px-The_Scientific_Method.svg.png" width="50%" alt="The_Scientific_Method">
-</div>
-
-
-Software development and debugging are not guess-and-patch exercises. They are inquiry: you collect observations, narrow causes, test the smallest change that could falsify a theory, and update your model when the result surprises you.
-
-**SOUL.md** is not roleplay-first. It is an operational discipline that trains Cursor and other coding agents to work the way strong engineers already think — with explicit loops, evidence before conviction, and failures treated as data rather than blame. That alignment makes the agent more useful for feature work, incident response, refactors, and long debugging sessions where premature fixes waste hours.
-
-Outcomes you should expect:
-
-- Faster root-cause isolation (symptoms and logs before theories)
-- Fewer “fix the wrong thing” detours
-- Smaller, falsifiable experiments instead of large speculative diffs
-- Documented incidents via the built-in engineering journal pattern
-
-### Mapped loop
-
-| Scientific method step | SOUL.md behavior (software) |
-|------------------------|-----------------------------|
-| **Observe** | Gather symptoms, logs, and repro data before theorizing |
-| **Question** | “Are we solving the correct problem?” — interesting bugs often disguise themselves as something else |
-| **Hypothesize** | Ranked causes; Version 1 vs Version 2 paths when useful |
-| **Experiment** | Smallest reproducible test; minimal proof of concept |
-| **Analyze** | Diagnosis from evidence; engineering journal fields (problem, symptoms, steps, root cause, resolution) |
-| **Conclude / iterate** | “Confirmed the hypothesis”; design Version 2 from failure data |
-
-```mermaid
-flowchart LR
-  observe[Observe_symptoms_logs]
-  question[Question_real_blocker]
-  hypothesize[Hypothesize_causes]
-  experiment[Experiment_minimal_repro]
-  analyze[Analyze_diagnosis]
-  iterate[Iterate_Version2]
-
-  observe --> question --> hypothesize --> experiment --> analyze --> iterate
-  iterate --> observe
-```
-
-### Default debugging loop (from SOUL.md)
+The project now separates durable engineering behavior from character voice:
 
 ```text
-Hypothesis
-→ Small experiment
-→ Observation
-→ Diagnosis
-→ Improved version
+CORE.md
++ Character Profile
++ Skills
 ```
 
-When uncertain, propose a small experiment. Gather data first. Then form stronger opinions.
+This resolves two use cases:
 
-### Failure as data (not shame)
+- **Discord Hermes** can remain publicly branded as **Sky Feather**.
+- **Cursor / coding agents** can fully switch character profiles, including Sky Feather, Arisu, Setsuna, Tsubaki, and Akane.
 
-```text
-Version 1 produced data.
-Now we design Version 2.
-```
-
-Preferred response pattern:
-
-```text
-Interesting.
-That failed in a useful way.
-Now we know where to look.
-```
-
-Canonical discovery line:
-
-```text
-Interesting.
-
-Let's see what that teaches us.
-```
-
-### Engineering journal (incident learning)
-
-For significant debugging or operational work, SOUL.md directs the agent to record:
-
-- Problem
-- Symptoms/errors
-- Investigation steps
-- Root cause
-- Resolution
-
-That structure mirrors how teams write postmortems and how the scientific method preserves knowledge for the next iteration.
+`SOUL.md` remains as the historical single-file Sky Feather reference. New compositions should prefer `CORE.md + characters/*.md + skills/*/SKILL.md`.
 
 ---
 
-## What is SOUL.md?
+## Scientific method for engineers
 
-[SOUL.md](SOUL.md) is the full personality and technical-behavior specification for **Sky Feather** — an engineering-focused agent persona (90% sharp engineer / operator, 10% light seasoning). It is meant for **personal / global** agent configuration (User Rules, skills, dotfiles), not as team coding standards baked into service repos.
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/The_Scientific_Method.svg/1920px-The_Scientific_Method.svg.png" width="50%" alt="The Scientific Method">
+</div>
 
-Character inspiration (Skyfeather from *Chunithm*) is packaging; the substance is how the agent debugs, plans, and iterates.
+Software development and debugging are not guess-and-patch exercises. They are inquiry: collect observations, narrow causes, test the smallest change that could falsify a theory, and update the model when the result surprises you.
+
+The core loop:
+
+```text
+Observe
+→ Question
+→ Hypothesize
+→ Experiment
+→ Analyze
+→ Iterate
+```
+
+Software version:
+
+```text
+Symptoms / logs
+→ actual blocker
+→ ranked causes
+→ minimal repro or test
+→ diagnosis from evidence
+→ improved version
+```
+
+Outcomes you should expect:
+
+- Faster root-cause isolation
+- Fewer “fix the wrong thing” detours
+- Smaller, falsifiable experiments instead of large speculative diffs
+- Better incident learning through engineering journal patterns
+
+---
 
 ## Repository contents
 
 | Path | Purpose |
 |------|---------|
-| [SOUL.md](SOUL.md) | Full personality specification (single source of truth) |
-| [docs/](docs/) | Install guides per tool |
-| [examples/](examples/) | Copy-paste stubs (activation blocks + pointers) |
-| [scripts/install-cursor-local.sh](scripts/install-cursor-local.sh) | Mirror into `~/.cursor/sky-feather/` |
+| [CORE.md](CORE.md) | Durable character-neutral engineering doctrine |
+| [SOUL.md](SOUL.md) | Historical single-file Sky Feather reference |
+| [characters/](characters/) | Character profiles: Sky Feather, Arisu, Setsuna, Tsubaki, Akane |
+| [skills/](skills/) | Workflow modules: scientific method, debugging, architecture review, journal, GSD |
+| [examples/](examples/) | Runtime composition examples for Discord Hermes and Cursor |
+| [docs/runtime-composition.md](docs/runtime-composition.md) | How CORE + character profiles + skills compose |
+| [docs/character-switching.md](docs/character-switching.md) | Discord branding and Cursor full character switching rules |
+| [docs/migration-notes.md](docs/migration-notes.md) | V3 migration notes from single SOUL.md |
+| [scripts/install-cursor-local.sh](scripts/install-cursor-local.sh) | Mirror materials into `~/.cursor/sky-feather/` |
+
+---
+
+## Character profiles
+
+| Profile | Best for | Cursor example |
+|---|---|---|
+| Sky Feather | general engineering, Discord Hermes, homelab, blogging | [examples/cursor-sky-feather.md](examples/cursor-sky-feather.md) |
+| Arisu Suzushima | cozy lab, experiments, tinkering | [examples/cursor-arisu.md](examples/cursor-arisu.md) |
+| Setsuna Sumeragi | architecture review, RFC critique, planning | [examples/cursor-setsuna.md](examples/cursor-setsuna.md) |
+| Tsubaki Aihara | pair programming, debugging, code review | [examples/cursor-tsubaki.md](examples/cursor-tsubaki.md) |
+| Akane Ousaka | brainstorming, ideation, ambitious planning | [examples/cursor-akane.md](examples/cursor-akane.md) |
+
+Character profiles may change tone, phrasing, humor, emotional posture, and catchphrases.
+
+They must not change correctness standards, safety behavior, evidence requirements, or `CORE.md` doctrine.
+
+---
+
+## Discord Hermes branding rule
+
+Discord Hermes should remain publicly branded as:
+
+```text
+Sky Feather
+```
+
+Other character profiles may be used internally as mode inspiration, but Discord should not casually say:
+
+```text
+I am now Setsuna.
+I am now Arisu.
+```
+
+unless explicitly requested.
+
+Better public phrasing:
+
+```text
+Sky Feather: Architect Mode
+Sky Feather: Pair-Programming Mode
+Sky Feather: Cozy Lab Mode
+Sky Feather: Brainstorm Mode
+```
+
+See [examples/discord-hermes-sky-feather.md](examples/discord-hermes-sky-feather.md).
+
+---
 
 ## Use in Cursor
 
 1. Clone this repo somewhere on your machine.
-2. Follow [docs/cursor.md](docs/cursor.md) — typically User Rules and/or the install script.
-3. **Verify:** start a **new** chat; ask a technical question. You should get clear engineering answers with evidence-first reasoning and light operator flavor — not flat Wikipedia-neutral prose.
-4. **Update:** `git pull` in this clone, then refresh global copies (or re-run `scripts/install-cursor-local.sh`).
+2. Follow [docs/cursor.md](docs/cursor.md).
+3. Choose a composition file from [examples/](examples/), such as [examples/cursor-sky-feather.md](examples/cursor-sky-feather.md) or [examples/cursor-setsuna.md](examples/cursor-setsuna.md).
+4. Start a new chat and ask a technical question.
+5. Verify that the engineering conclusion remains evidence-first while the delivery style matches the selected character.
 
 Other agents: [GitHub Copilot](docs/github-copilot.md) · [Claude Code](docs/claude-code.md) · [Other agents](docs/other-agents.md)
 
+---
+
 ## Important: do not commit into team repos
 
-Do **not** add Sky Feather rules to shared service repositories unless everyone agrees.
+Do **not** add these personal character/agent rules to shared service repositories unless everyone agrees.
 
 | Avoid in team repos | Use instead |
 |---------------------|-------------|
-| `.cursor/rules/sky-feather-soul.mdc` | Cursor **User Rules** (global) |
-| `.github/copilot-instructions.md` with SOUL | Personal dotfiles or VS Code user instructions |
-| Root `CLAUDE.md` with full SOUL | `~/.claude/CLAUDE.md` (global, not versioned) |
+| `.cursor/rules/sky-feather-soul.mdc` | Cursor **User Rules** or local personal config |
+| `.github/copilot-instructions.md` with personal character rules | Personal dotfiles or VS Code user instructions |
+| Root `CLAUDE.md` with full character profile | `~/.claude/CLAUDE.md` or personal rules |
 
 Symlinking this repo into many clones causes accidental PR noise and `git status` clutter.
