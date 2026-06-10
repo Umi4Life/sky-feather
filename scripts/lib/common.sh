@@ -569,8 +569,6 @@ sf_generate_hermes_personalities_yaml() {
 
   {
     sf_personalities_marker_start
-    echo "agent:"
-    echo "  personalities:"
   } > "${output_path}"
 
   while IFS= read -r char_id; do
@@ -589,6 +587,27 @@ sf_generate_hermes_personalities_yaml() {
 
   echo "$(sf_personalities_marker_end)" >> "${output_path}"
   rm -f "${preset_tmp}"
+}
+
+sf_validate_hermes_config_personalities() {
+  local config_path="$1"
+  local agent_count preset_count
+
+  if [[ ! -f "${config_path}" ]]; then
+    echo "warning: missing Hermes config: ${config_path}" >&2
+    return 0
+  fi
+
+  agent_count="$(grep -c '^agent:[[:space:]]*$' "${config_path}" || true)"
+  if [[ "${agent_count}" -ne 1 ]]; then
+    echo "warning: expected exactly 1 root 'agent:' in ${config_path}, found ${agent_count}" >&2
+    echo "warning: duplicate agent: keys can cause Hermes to ignore Sky Feather /personality presets" >&2
+  fi
+
+  preset_count="$(grep -cE '^[[:space:]]{4}(sky-feather|setsuna|tsubaki|arisu|akane|kaede|koboshi):' "${config_path}" || true)"
+  if [[ "${preset_count}" -lt 7 ]]; then
+    echo "warning: expected 7 Sky Feather personality presets in ${config_path}, found ${preset_count}" >&2
+  fi
 }
 
 sf_merge_hermes_personalities() {
@@ -615,37 +634,115 @@ sf_merge_hermes_personalities() {
   for py in python3 python; do
     command -v "${py}" >/dev/null 2>&1 || continue
     "${py}" - "${config_path}" "${block_tmp}" <<'PY'
+import re
 import sys
 
 config_path, block_path = sys.argv[1], sys.argv[2]
-with open(block_path, encoding="utf-8") as f:
-    new_block = f.read().rstrip() + "\n"
 
-start = "# --- sky-feather:personalities:start (generated; do not edit) ---"
-end = "# --- sky-feather:personalities:end ---"
+START = "# --- sky-feather:personalities:start (generated; do not edit) ---"
+END = "# --- sky-feather:personalities:end ---"
+LEGACY_WARNING = "# WARNING: sky-feather personalities appended"
 
-try:
-    with open(config_path, encoding="utf-8") as f:
-        existing = f.read()
-except OSError:
-    existing = ""
 
-if start in existing and end in existing:
-    before, rest = existing.split(start, 1)
-    _, after = rest.split(end, 1)
-    merged = before.rstrip() + "\n\n" + new_block.rstrip() + "\n" + after.lstrip("\n")
-elif not existing.strip():
-    merged = new_block
-else:
-  warning = (
-      "# WARNING: sky-feather personalities appended — review for duplicate agent: keys\n"
-  )
-  merged = existing.rstrip() + "\n\n" + warning + new_block
+def read_text(path: str) -> str:
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except OSError:
+        return ""
+
+
+def strip_agent_wrapper(block: str) -> str:
+    lines = []
+    for line in block.splitlines():
+        stripped = line.strip()
+        if stripped in ("agent:", "personalities:"):
+            continue
+        lines.append(line)
+    return "\n".join(lines).strip("\n")
+
+
+def extract_marker_block(text: str) -> str:
+    if START not in text or END not in text:
+        return strip_agent_wrapper(text)
+    _, rest = text.split(START, 1)
+    body, _ = rest.split(END, 1)
+    return strip_agent_wrapper(body)
+
+
+def remove_marker_block(text: str) -> str:
+    if START not in text or END not in text:
+        return text
+    before, rest = text.split(START, 1)
+    _, after = rest.split(END, 1)
+    return before + after
+
+
+def remove_legacy_append(text: str) -> str:
+    if LEGACY_WARNING not in text:
+        return text
+    warning_idx = text.index(LEGACY_WARNING)
+    if START in text[warning_idx:]:
+        end_idx = text.index(END, warning_idx) + len(END)
+        tail = text[end_idx:].lstrip("\n")
+        return text[:warning_idx].rstrip() + ("\n\n" + tail if tail else "\n")
+    return text[:warning_idx].rstrip() + "\n"
+
+
+def remove_duplicate_root_agent_blocks(text: str) -> str:
+    matches = list(re.finditer(r"^agent:\s*$", text, re.MULTILINE))
+    if len(matches) <= 1:
+        return text
+    # Drop later root-level agent: sections (old installer appended a second block).
+    second = matches[1].start()
+    return text[:second].rstrip() + "\n"
+
+
+def wrap_presets(preset_body: str) -> str:
+    body = preset_body.strip("\n")
+    if not body:
+        return ""
+    return f"{START}\n{body}\n{END}\n"
+
+
+def insert_under_personalities(text: str, preset_block: str) -> str:
+    text = text.rstrip() + "\n"
+    agent_match = re.search(r"^agent:\s*$", text, re.MULTILINE)
+    if not agent_match:
+        return f"agent:\n  personalities:\n{preset_block}"
+
+    after_agent = text[agent_match.end() :]
+    pers_match = re.search(r"^  personalities:\s*$", after_agent, re.MULTILINE)
+    if not pers_match:
+        insert_at = agent_match.end()
+        return text[:insert_at] + "\n  personalities:\n" + preset_block + text[insert_at:]
+
+    insert_at = agent_match.end() + pers_match.end()
+    return text[:insert_at] + "\n" + preset_block + text[insert_at:]
+
+
+new_block = wrap_presets(extract_marker_block(read_text(block_path)))
+if not new_block.strip():
+    raise SystemExit("error: generated personalities block is empty")
+
+config = read_text(config_path)
+config = remove_legacy_append(config)
+config = remove_marker_block(config)
+config = remove_duplicate_root_agent_blocks(config)
+merged = insert_under_personalities(config, new_block)
+
+agent_roots = len(re.findall(r"^agent:\s*$", merged, re.MULTILINE))
+if agent_roots != 1:
+    print(
+        f"warning: expected 1 root agent: key after merge, found {agent_roots}",
+        file=sys.stderr,
+    )
 
 with open(config_path, "w", encoding="utf-8", newline="\n") as f:
-    f.write(merged)
+    f.write(merged if merged.endswith("\n") else merged + "\n")
 PY
     rm -f "${block_tmp}"
+    sf_validate_hermes_config_personalities "${config_path}"
     return 0
   done
 

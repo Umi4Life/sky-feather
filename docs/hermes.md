@@ -182,8 +182,9 @@ After `git pull && bash scripts/install-hermes-global.sh` on the Hermes VM:
 ```bash
 test -f ~/.hermes/config.yaml
 grep -q 'sky-feather:personalities:start' ~/.hermes/config.yaml
+test "$(grep -c '^agent:[[:space:]]*$' ~/.hermes/config.yaml)" -eq 1   # must be exactly 1
 head -20 ~/.hermes/SOUL.md   # CORE + branding; not full Setsuna voice
-grep -E '^\s+(sky-feather|setsuna|tsubaki|arisu|akane|kaede|koboshi):' ~/.hermes/config.yaml
+grep -E '^[[:space:]]{4}(sky-feather|setsuna|tsubaki|arisu|akane|kaede|koboshi):' ~/.hermes/config.yaml
 test -f ~/.hermes/sky-feather/personalities.generated.yaml
 bash scripts/install-hermes-global.sh --dry-run
 ```
@@ -193,6 +194,34 @@ Manual Discord checks:
 - `/personality setsuna` → Architect delivery, public Sky Feather branding
 - `/personality sky-feather` → default Sky Feather delivery
 - Same technical question across modes → same engineering conclusion, different tone
+
+### Troubleshooting: `unknown personality: setsuna`
+
+Usually means Hermes did not load Sky Feather presets from `agent.personalities`.
+
+1. **Check for duplicate root `agent:` keys** (common after first Route B install on an existing VM):
+
+   ```bash
+   grep -n '^agent:' ~/.hermes/config.yaml
+   ```
+
+   Must be **exactly one** `agent:` at the root. If you see two, re-run install after `git pull` (merge fix consolidates under the first `agent.personalities`).
+
+2. **Confirm presets sit under `agent.personalities`**, not in a second `agent:` block:
+
+   ```bash
+   sed -n '/^agent:/,/^[^ #]/p' ~/.hermes/config.yaml | head -40
+   ```
+
+3. **Re-apply merge and restart gateway** (SOUL + config reload):
+
+   ```bash
+   cd ~/sky-feather && git pull
+   bash scripts/install-hermes-global.sh
+   sudo systemctl restart hermes-gateway
+   ```
+
+4. **Built-in presets still work?** Try `/personality helpful`. If built-ins work but `setsuna` does not, the custom block is not in the active `agent.personalities` map.
 
 ---
 

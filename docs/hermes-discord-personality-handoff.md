@@ -151,11 +151,10 @@ agent:
 
 ```yaml
 # --- sky-feather:personalities:start (generated; do not edit) ---
-agent:
-  personalities:
-    feather: |
+    setsuna: |
       ...
 # --- sky-feather:personalities:end ---
+# (Inserted under the existing root agent.personalities — not a second agent: block.)
 ```
 
 - [ ] Preserve other `agent:` keys and top-level Hermes settings
