@@ -35,7 +35,7 @@ Core characters remain Sky Feather, Suzushima Arisu, Sumeragi Setsuna, Aihara Ts
 
 ---
 
-## Scientific method for engineers
+## [Scientific Method](https://flagmac.com/id/lessons/scientific_method/scientific_method.html) for engineers
 
 <div align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/The_Scientific_Method.svg/1920px-The_Scientific_Method.svg.png" width="50%" alt="The Scientific Method">
