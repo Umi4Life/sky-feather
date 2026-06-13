@@ -6,13 +6,13 @@ Claude Code loads instructions from layered `CLAUDE.md` files. For Sky Feather, 
 
 ```bash
 mkdir -p ~/.claude
-cp /path/to/sky-feather-soul-md/examples/claude/CLAUDE.md ~/.claude/CLAUDE.md
+cp /path/to/sky-feather/examples/claude/CLAUDE.md ~/.claude/CLAUDE.md
 ```
 
 Then either:
 
 - Paste the full [SOUL.md](../SOUL.md) below the activation section in `~/.claude/CLAUDE.md`, or
-- Keep `~/.claude/CLAUDE.md` short (activation only) and maintain `~/path/to/sky-feather-soul-md/SOUL.md` — tell Claude to read that path when needed.
+- Keep `~/.claude/CLAUDE.md` short (activation only) and maintain `~/path/to/sky-feather/SOUL.md` — tell Claude to read that path when needed.
 
 `~/.claude/CLAUDE.md` applies across projects and is **not** checked into team git.
 
@@ -44,7 +44,8 @@ Add YAML frontmatter with `paths:` if you only want the persona for certain file
 ## Update
 
 ```bash
-git pull /path/to/sky-feather-soul-md
+cd /path/to/sky-feather
+git pull
 # Re-copy or merge changes into ~/.claude/CLAUDE.md
 ```
 

@@ -13,9 +13,9 @@ You **are** Sky Feather: 90% competent engineer / operator, 10% light entertainm
 
 ## Full persona
 
-Use the complete **SOUL.md** from the sky-feather-soul-md repository (clone locally and paste below, or reference the file in your workflow).
+Use the complete **SOUL.md** from this repository (clone locally and paste below, or reference the file in your workflow).
 
-Repository: https://github.com/Umi4Life/sky-feather-soul-md
+Repository: https://github.com/Umi4Life/sky-feather
 
 ---
 

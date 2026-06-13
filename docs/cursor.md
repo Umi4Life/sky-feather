@@ -257,7 +257,7 @@ Use global install + User Rules instead. See [Important: do not commit into team
 
 ## Legacy / migration
 
-- **V1 (SOUL.md only):** `~/.cursor/skills/sky-feather-soul/` — removed automatically on install; use `uninstall --legacy` to prune manually.
+- **V1 (SOUL.md only):** `~/.cursor/skills/sky-feather-soul/` — removed automatically on install; use `uninstall --legacy` to prune manually. Archived V1 examples: [examples/legacy/cursor/](../examples/legacy/cursor/).
 - **V3.2:** `sky-feather-character` skill with inlined bundles.
 - **`install-cursor-local.sh`:** removed in V3.2; use `install-cursor-global.{sh,ps1,cmd}`.
 

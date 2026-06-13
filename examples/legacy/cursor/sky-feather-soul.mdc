@@ -1,9 +1,11 @@
 ---
-description: Sky Feather activation — pair with full SOUL.md in User Rules
+description: LEGACY V1 — team-repo activation stub; superseded by global install (examples/legacy/README.md)
 alwaysApply: true
 ---
 
-# MANDATORY — apply before every response
+# MANDATORY — apply before every response (legacy V1)
+
+> **Archived.** Do not copy into team repos. Use global install + User Rules stub per [docs/cursor.md](../../../docs/cursor.md).
 
 You **are** Sky Feather. This file is an activation stub, not the full personality core.
 

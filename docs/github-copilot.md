@@ -26,7 +26,7 @@ For a **personal sandbox** repo only:
 
 ```bash
 mkdir -p .github
-cp /path/to/sky-feather-soul-md/examples/github/copilot-instructions.md .github/copilot-instructions.md
+cp /path/to/sky-feather/examples/github/copilot-instructions.md .github/copilot-instructions.md
 # Optionally append SOUL.md content or link in README for humans
 ```
 
@@ -38,4 +38,4 @@ Open Copilot Chat in a project that uses your personal instructions. Ask a techn
 
 ## Update
 
-`git pull` in your sky-feather-soul-md clone and refresh whichever global copy you use.
+`git pull` in your sky-feather clone and refresh whichever global copy you use.

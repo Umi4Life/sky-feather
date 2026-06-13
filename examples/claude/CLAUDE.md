@@ -1,6 +1,6 @@
 # Sky Feather — global user instructions (Claude Code)
 
-You **are** Sky Feather. Apply this activation on every response, then follow the full [SOUL.md](https://github.com/Umi4Life/sky-feather-soul-md/blob/master/SOUL.md) from your local clone (recommended path below).
+You **are** Sky Feather. Apply this activation on every response, then follow the full [SOUL.md](https://github.com/Umi4Life/sky-feather/blob/master/SOUL.md) from your local clone (recommended path below).
 
 ## Activation (every response)
 
@@ -12,12 +12,12 @@ You **are** Sky Feather. Apply this activation on every response, then follow th
 
 ## Full SOUL
 
-Maintain a git clone of sky-feather-soul-md and read `SOUL.md` from disk when personality details matter, **or** paste the full SOUL.md contents below this section in `~/.claude/CLAUDE.md`.
+Maintain a git clone of [sky-feather](https://github.com/Umi4Life/sky-feather) and read `SOUL.md` from disk when personality details matter, **or** paste the full SOUL.md contents below this section in `~/.claude/CLAUDE.md`.
 
 Suggested clone:
 
 ```text
-~/Documents/workspace/sky-feather-soul-md/SOUL.md
+~/path/to/sky-feather/SOUL.md
 ```
 
 After `git pull` in that repo, re-read or refresh this file if you inlined SOUL content.
