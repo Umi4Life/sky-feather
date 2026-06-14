@@ -102,6 +102,34 @@ Cursor loads full profiles via the global V3.2 install. See [cursor.md](cursor.m
 
 Start a **new chat** after switching.
 
+Flat bundles (after install): `~/.cursor/sky-feather/bundles/<id>.md`
+
+Composition metadata (which files each bundle includes): `examples/cursor-*.md`
+
+## Claude Full Character Switching
+
+Claude Code loads full profiles via the global V3.2 install. See [claude-code.md](claude-code.md) and [claude-quickstart.md](claude-quickstart.md).
+
+Claude uses an **independent** mirror (`~/.claude/sky-feather/`) — active character may differ from Cursor.
+
+### Switch command
+
+```bash
+# macOS / Linux / Git Bash
+./scripts/switch-claude-character.sh <character-id-or-alias>
+```
+
+```powershell
+# Windows PowerShell
+.\scripts\switch-claude-character.ps1 <character-id-or-alias>
+```
+
+Start a **new Claude Code session** after switching.
+
+Mid-chat (best-effort): `/character <id>` (installed to `~/.claude/skills/character/SKILL.md`).
+
+Flat bundles (after install): `~/.claude/sky-feather/bundles/<id>.md`
+
 ### Character IDs
 
 | ID | Aliases |
@@ -114,9 +142,7 @@ Start a **new chat** after switching.
 | `kujo-kaede` | kaede, ops |
 | `inohara-koboshi` | koboshi, automation |
 
-Flat bundles (after install): `~/.cursor/sky-feather/bundles/<id>.md`
-
-Composition metadata (which files each bundle includes): `examples/cursor-*.md`
+Applies to both Cursor and Claude global installs.
 
 ## Task-Based Suggestions
 

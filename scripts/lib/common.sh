@@ -8,7 +8,7 @@ LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${LIB_DIR}/paths.sh"
 
 sf_characters_json() {
-  local hermes_json cursor_json
+  local hermes_json cursor_json claude_json
   hermes_json="$(sf_hermes_mirror)/scripts-lib/characters.json"
   if [[ -f "${hermes_json}" ]]; then
     printf '%s' "${hermes_json}"
@@ -17,6 +17,11 @@ sf_characters_json() {
   cursor_json="$(sf_sky_feather_mirror)/scripts-lib/characters.json"
   if [[ -f "${cursor_json}" ]]; then
     printf '%s' "${cursor_json}"
+    return
+  fi
+  claude_json="$(sf_claude_mirror)/scripts-lib/characters.json"
+  if [[ -f "${claude_json}" ]]; then
+    printf '%s' "${claude_json}"
     return
   fi
   printf '%s/lib/characters.json' "$(sf_scripts_dir)"
@@ -303,13 +308,14 @@ sf_render_activation_block() {
 sf_append_skill_index() {
   local repo_root="$1"
   local char_id="$2"
+  local mirror_home="${3:-~/.cursor/sky-feather}"
 
   echo "# Skills (reference only)"
   echo ""
   echo "Load when the task matches. Paths are relative to the Sky Feather mirror:"
   echo ""
   echo '```text'
-  echo '~/.cursor/sky-feather/skills/<skill>/SKILL.md'
+  echo "${mirror_home}/skills/<skill>/SKILL.md"
   echo '```'
   echo ""
 
@@ -320,7 +326,7 @@ sf_append_skill_index() {
       echo "error: missing skill file ${skill_path}" >&2
       exit 1
     fi
-    echo "- **${skill}** -> \`~/.cursor/sky-feather/skills/${skill}/SKILL.md\`"
+    echo "- **${skill}** -> \`${mirror_home}/skills/${skill}/SKILL.md\`"
   done < <(sf_list_character_skills "${char_id}")
   echo ""
 }
@@ -329,6 +335,7 @@ sf_build_bundle_file() {
   local repo_root="$1"
   local output_dir="$2"
   local char_id="$3"
+  local mirror_home="${4:-~/.cursor/sky-feather}"
   local name file skill skill_path bundle_path
 
   name="$(sf_get_character_field "${char_id}" name)"
@@ -360,7 +367,7 @@ sf_build_bundle_file() {
     echo ""
     echo "---"
     echo ""
-    sf_append_skill_index "${repo_root}" "${char_id}"
+    sf_append_skill_index "${repo_root}" "${char_id}" "${mirror_home}"
   } > "${bundle_path}"
 
   printf '%s' "${bundle_path}"
@@ -369,9 +376,10 @@ sf_build_bundle_file() {
 sf_build_all_bundles() {
   local repo_root="$1"
   local output_dir="$2"
+  local mirror_home="${3:-~/.cursor/sky-feather}"
   local id
   while IFS= read -r id; do
-    sf_build_bundle_file "${repo_root}" "${output_dir}" "${id}"
+    sf_build_bundle_file "${repo_root}" "${output_dir}" "${id}" "${mirror_home}"
   done < <(sf_list_character_ids)
 }
 
@@ -953,5 +961,79 @@ $(sf_user_rules_stub)
 ---
 
 Start a new chat after install or character switch for reliable application.
+EOF
+}
+
+sf_managed_claude_header() {
+  printf '%s' '<!-- Managed by sky-feather. Re-run install-claude-global or switch-claude-character. -->'
+}
+
+sf_write_claude_file() {
+  local bundle_path="$1"
+  local claude_md
+  claude_md="$(sf_claude_md_path)"
+
+  mkdir -p "$(sf_claude_home)"
+  {
+    sf_managed_claude_header
+    echo ""
+    cat "${bundle_path}"
+  } > "${claude_md}"
+}
+
+sf_is_managed_claude_md() {
+  local path="${1:-$(sf_claude_md_path)}"
+  if [[ ! -f "${path}" ]]; then
+    return 1
+  fi
+  grep -qF "$(sf_managed_claude_header)" "${path}"
+}
+
+sf_sync_claude_global_bin() {
+  local repo_scripts_dir="$1"
+  local bin_dir
+  bin_dir="$(sf_claude_global_bin_dir)"
+  mkdir -p "${bin_dir}"
+
+  for name in switch-claude-character.sh switch-claude-character.ps1 switch-claude-character.cmd; do
+    if [[ -f "${repo_scripts_dir}/${name}" ]]; then
+      cp "${repo_scripts_dir}/${name}" "${bin_dir}/${name}"
+    fi
+  done
+
+  rm -rf "${bin_dir}/lib"
+  cp -R "${repo_scripts_dir}/lib" "${bin_dir}/lib"
+}
+
+sf_install_claude_character_skill() {
+  local repo_scripts_dir="$1"
+  local template="${repo_scripts_dir}/templates/claude-character-skill.md"
+  local skill_dir
+  skill_dir="$(sf_claude_character_skill_dir)"
+
+  if [[ ! -f "${template}" ]]; then
+    echo "error: missing ${template}" >&2
+    exit 1
+  fi
+
+  mkdir -p "${skill_dir}"
+  cp "${template}" "${skill_dir}/SKILL.md"
+}
+
+sf_print_claude_next_steps() {
+  cat <<EOF
+
+Installed. Next steps:
+  1. Start a new Claude Code session (CLAUDE.md reloads)
+  2. Quick reference: docs/claude-quickstart.md
+  3. Switch character: $(sf_claude_global_switch_script_sh) <id>
+  4. Mid-chat switch (best-effort): /character <id>
+
+Global paths:
+  $(sf_claude_md_path)
+  $(sf_claude_mirror)/
+  $(sf_claude_character_skill_dir)/SKILL.md
+
+Start a new session after install or character switch for reliable application.
 EOF
 }

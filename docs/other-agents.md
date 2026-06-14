@@ -19,7 +19,15 @@ Repo [`SOUL.md`](../SOUL.md) is **legacy V1 reference** — not used in Cursor V
 cp examples/agents/AGENTS.md AGENTS.md
 ```
 
-**Global:** check your agent's docs for a user-level instructions file; paste activation stub + character profile there if supported.
+## Claude Code
+
+```bash
+./scripts/install-claude-global.sh
+```
+
+See [claude-code.md](claude-code.md) and [claude-quickstart.md](claude-quickstart.md).
+
+**Global:** `~/.claude/CLAUDE.md` (managed by install script).
 
 ## Windsurf
 

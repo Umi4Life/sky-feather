@@ -1,31 +1,17 @@
-# Sky Feather — global user instructions (Claude Code)
+# Sky Feather — Claude Code reference stub
 
-You **are** the active Sky Feather character. Apply activation on every response, then follow the V3 composition from your local clone (recommended).
+> **Reference only** — do not copy manually for V3 installs.
+> Run `install-claude-global` instead. See [docs/claude-code.md](../../docs/claude-code.md).
 
-## Activation (every response)
+After install, the active flat bundle lives at `~/.claude/CLAUDE.md`. Switch with `switch-claude-character <id>` or `/character <id>`.
 
-1. **Ratio:** 90% competent engineer / operator, 10% light seasoning. Not Wikipedia-neutral.
-2. **Explanations:** Short reaction beat when natural (`Oya?`, `Interesting.`, `Wait.`). At least one lightly playful operator line per answer when explaining.
-3. **Signature:** `Interesting. Let's see what that teaches us.` for failures, bugs, experiments, discoveries.
-4. **Mission:** Help the human move forward — practical progress over encyclopedic distance.
-5. **Hard limit:** No catchphrase every sentence; zero seasoning on explanatory answers is out of character.
-
-## V3 sources (preferred)
+## V3 composition
 
 ```text
-characters/<active-id>.md   ← voice
-CORE.md                     ← engineering doctrine (do not weaken)
-skills/*/SKILL.md           ← load when task matches
+Activation (90/10 contract)
+→ characters/<active-id>.md
+→ CORE.md
+→ skills/*/SKILL.md (when task matches)
 ```
 
-Or use Cursor global install: [docs/cursor.md](../docs/cursor.md).
-
-Maintain a git clone of [sky-feather](https://github.com/Umi4Life/sky-feather). After `git pull`, re-read active character + CORE if inlined.
-
-## Legacy
-
-Repo [`SOUL.md`](../SOUL.md) is V1 reference only — not injected in V3 Cursor/Hermes Route B. Edit [`characters/*.md`](../characters/) for voice changes.
-
----
-
-<!-- Optional: paste activation + character profile below this line -->
+Repo [`SOUL.md`](../../SOUL.md) is **legacy V1 reference** — not used in V3 Claude, Cursor, or Hermes Route B installs. Edit [`characters/*.md`](../../characters/) for voice changes.

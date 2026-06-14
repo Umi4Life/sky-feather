@@ -65,3 +65,38 @@ function Get-SfHermesSkillsDir {
 function Get-SfHermesBackupsDir {
     return Join-Path (Get-SfHermesHome) 'backups'
 }
+
+function Get-SfClaudeHome {
+    if ($env:CLAUDE_HOME) {
+        return $env:CLAUDE_HOME
+    }
+    return Join-Path $env:USERPROFILE '.claude'
+}
+
+function Get-SfClaudeMirror {
+    return Join-Path (Get-SfClaudeHome) 'sky-feather'
+}
+
+function Get-SfClaudeMdPath {
+    return Join-Path (Get-SfClaudeHome) 'CLAUDE.md'
+}
+
+function Get-SfClaudeGlobalBinDir {
+    return Join-Path (Get-SfClaudeMirror) 'bin'
+}
+
+function Get-SfClaudeGlobalSwitchScriptPs1 {
+    return Join-Path (Get-SfClaudeGlobalBinDir) 'switch-claude-character.ps1'
+}
+
+function Get-SfClaudeGlobalSwitchScriptSh {
+    return Join-Path (Get-SfClaudeGlobalBinDir) 'switch-claude-character.sh'
+}
+
+function Get-SfClaudeCharacterSkillDir {
+    return Join-Path (Get-SfClaudeHome) 'skills\character'
+}
+
+function Get-SfClaudeMirrorHomeDisplay {
+    return '~/.claude/sky-feather'
+}

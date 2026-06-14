@@ -72,3 +72,39 @@ sf_hermes_backups_dir() {
 sf_hermes_config_path() {
   printf '%s/config.yaml' "$(sf_hermes_home)"
 }
+
+sf_claude_home() {
+  if [[ -n "${CLAUDE_HOME:-}" ]]; then
+    printf '%s' "${CLAUDE_HOME}"
+    return
+  fi
+  printf '%s/.claude' "${HOME}"
+}
+
+sf_claude_mirror() {
+  printf '%s/sky-feather' "$(sf_claude_home)"
+}
+
+sf_claude_md_path() {
+  printf '%s/CLAUDE.md' "$(sf_claude_home)"
+}
+
+sf_claude_global_bin_dir() {
+  printf '%s/bin' "$(sf_claude_mirror)"
+}
+
+sf_claude_global_switch_script_sh() {
+  printf '%s/switch-claude-character.sh' "$(sf_claude_global_bin_dir)"
+}
+
+sf_claude_global_switch_script_ps1() {
+  printf '%s/switch-claude-character.ps1' "$(sf_claude_global_bin_dir)"
+}
+
+sf_claude_character_skill_dir() {
+  printf '%s/skills/character' "$(sf_claude_home)"
+}
+
+sf_claude_mirror_home_display() {
+  printf '~/.claude/sky-feather'
+}

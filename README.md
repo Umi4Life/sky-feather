@@ -50,6 +50,7 @@ Full doctrine: [`CORE.md`](CORE.md) (Permanent Principles, Evidence Standards, F
 - [CORE.md](CORE.md) — durable doctrine
 - [Character Introduction Wiki](docs/wiki/character-introductions/README.md)
 - [Cursor quickstart](docs/cursor-quickstart.md)
+- [Claude Code quickstart](docs/claude-quickstart.md)
 - [Hermes install](docs/hermes.md)
 
 ---
@@ -93,10 +94,12 @@ See [docs/runtime-composition.md](docs/runtime-composition.md) for composition r
 | Cursor | [quickstart](docs/cursor-quickstart.md) → [full guide](docs/cursor.md) |
 | Hermes | [hermes.md](docs/hermes.md) |
 | GitHub Copilot | [github-copilot.md](docs/github-copilot.md) |
-| Claude Code | [claude-code.md](docs/claude-code.md) |
+| Claude Code | [quickstart](docs/claude-quickstart.md) → [full guide](docs/claude-code.md) |
 | Other agents | [other-agents.md](docs/other-agents.md) |
 
 **Cursor (summary):** clone this repo → run the global installer → paste the one-time User Rules stub → `switch-character` → start a new chat.
+
+**Claude Code (summary):** clone this repo → run `install-claude-global` → start a new session → `switch-claude-character` or `/character`.
 
 ---
 
@@ -123,9 +126,11 @@ See [docs/runtime-composition.md](docs/runtime-composition.md) for composition r
 | Path | Purpose |
 |------|---------|
 | [docs/runtime-composition.md](docs/runtime-composition.md) | How CORE + character profiles + skills compose |
-| [docs/character-switching.md](docs/character-switching.md) | Discord branding and Cursor character switching |
+| [docs/character-switching.md](docs/character-switching.md) | Discord branding and Cursor / Claude character switching |
 | [docs/migration-notes.md](docs/migration-notes.md) | Migration notes from single `SOUL.md` |
 | [docs/cursor-quickstart.md](docs/cursor-quickstart.md) | One-page Cursor install / switch / update |
+| [docs/claude-quickstart.md](docs/claude-quickstart.md) | One-page Claude Code install / switch / update |
+| [docs/claude-code.md](docs/claude-code.md) | Full Claude Code install, update, uninstall |
 | [docs/cursor.md](docs/cursor.md) | Full Cursor install, update, uninstall |
 | [docs/hermes.md](docs/hermes.md) | Hermes install and upgrade |
 | [docs/roadmap.md](docs/roadmap.md) | Shipped work, planned initiatives, validation logs |
@@ -136,8 +141,12 @@ See [docs/runtime-composition.md](docs/runtime-composition.md) for composition r
 |------|---------|
 | [scripts/install-cursor-global.sh](scripts/install-cursor-global.sh) | Global Cursor install (macOS / Linux / Git Bash) |
 | [scripts/install-cursor-global.ps1](scripts/install-cursor-global.ps1) | Global Cursor install (Windows PowerShell) |
-| [scripts/switch-character.sh](scripts/switch-character.sh) | Switch active global character profile |
+| [scripts/install-claude-global.sh](scripts/install-claude-global.sh) | Global Claude Code install (macOS / Linux / Git Bash) |
+| [scripts/install-claude-global.ps1](scripts/install-claude-global.ps1) | Global Claude Code install (Windows PowerShell) |
+| [scripts/switch-character.sh](scripts/switch-character.sh) | Switch active global Cursor character profile |
+| [scripts/switch-claude-character.sh](scripts/switch-claude-character.sh) | Switch active global Claude Code character profile |
 | [scripts/uninstall-cursor-global.sh](scripts/uninstall-cursor-global.sh) | Uninstall / prune global Cursor artifacts |
+| [scripts/uninstall-claude-global.sh](scripts/uninstall-claude-global.sh) | Uninstall / prune global Claude Code artifacts |
 | [scripts/install-hermes-global.sh](scripts/install-hermes-global.sh) | Install on Hermes (`~/.hermes/SOUL.md` + skills) |
 
 ---
