@@ -68,6 +68,53 @@ function Get-SfCharacterPersonalityKey {
     return $char.personalityKey
 }
 
+function Get-SfActivationTemplatePath {
+    return Join-Path (Get-SfScriptsDir) 'templates\activation-block.md'
+}
+
+function Render-SfActivationBlock {
+    param(
+        [Parameter(Mandatory)][string]$CharacterId
+    )
+
+    $char = Get-SfCharacterById -Id $CharacterId
+    $templatePath = Get-SfActivationTemplatePath
+    if (-not (Test-Path $templatePath)) {
+        throw "missing activation template: $templatePath"
+    }
+
+    $template = Get-Content $templatePath -Raw
+    return $template.
+        Replace('{{CHARACTER_NAME}}', $char.name).
+        Replace('{{CHARACTER_ID}}', $char.id)
+}
+
+function Append-SfSkillIndex {
+    param(
+        [Parameter(Mandatory)][System.Text.StringBuilder]$Builder,
+        [Parameter(Mandatory)][string]$RepoRoot,
+        [Parameter(Mandatory)]$Skills
+    )
+
+    [void]$Builder.AppendLine('# Skills (reference only)')
+    [void]$Builder.AppendLine('')
+    [void]$Builder.AppendLine('Load when the task matches. Paths are relative to the Sky Feather mirror:')
+    [void]$Builder.AppendLine('')
+    [void]$Builder.AppendLine('```text')
+    [void]$Builder.AppendLine('~/.cursor/sky-feather/skills/<skill>/SKILL.md')
+    [void]$Builder.AppendLine('```')
+    [void]$Builder.AppendLine('')
+
+    foreach ($skill in $Skills) {
+        $skillPath = Join-Path $RepoRoot "skills\$skill\SKILL.md"
+        if (-not (Test-Path $skillPath)) {
+            throw "missing skill file $skillPath"
+        }
+        [void]$Builder.AppendLine("- **$skill** -> ``~/.cursor/sky-feather/skills/$skill/SKILL.md``")
+    }
+    [void]$Builder.AppendLine('')
+}
+
 function Build-SfBundleFile {
     param(
         [Parameter(Mandatory)][string]$RepoRoot,
@@ -86,9 +133,7 @@ function Build-SfBundleFile {
     [void]$sb.AppendLine('')
     [void]$sb.AppendLine('---')
     [void]$sb.AppendLine('')
-    [void]$sb.AppendLine('# CORE (do not weaken)')
-    [void]$sb.AppendLine('')
-    [void]$sb.AppendLine((Get-Content (Join-Path $RepoRoot 'CORE.md') -Raw))
+    [void]$sb.AppendLine((Render-SfActivationBlock -CharacterId $CharacterId))
     [void]$sb.AppendLine('')
     [void]$sb.AppendLine('---')
     [void]$sb.AppendLine('')
@@ -98,21 +143,13 @@ function Build-SfBundleFile {
     [void]$sb.AppendLine('')
     [void]$sb.AppendLine('---')
     [void]$sb.AppendLine('')
-    [void]$sb.AppendLine('# Skills')
+    [void]$sb.AppendLine('# CORE (do not weaken)')
     [void]$sb.AppendLine('')
-
-    foreach ($skill in $char.skills) {
-        $skillPath = Join-Path $RepoRoot "skills\$skill\SKILL.md"
-        if (-not (Test-Path $skillPath)) {
-            throw "missing skill file $skillPath"
-        }
-        [void]$sb.AppendLine("## Skill: $skill")
-        [void]$sb.AppendLine('')
-        [void]$sb.AppendLine((Get-Content $skillPath -Raw))
-        [void]$sb.AppendLine('')
-        [void]$sb.AppendLine('---')
-        [void]$sb.AppendLine('')
-    }
+    [void]$sb.AppendLine((Get-Content (Join-Path $RepoRoot 'CORE.md') -Raw))
+    [void]$sb.AppendLine('')
+    [void]$sb.AppendLine('---')
+    [void]$sb.AppendLine('')
+    Append-SfSkillIndex -Builder $sb -RepoRoot $RepoRoot -Skills $char.skills
 
     $utf8NoBom = New-Object System.Text.UTF8Encoding $false
     [System.IO.File]::WriteAllText($bundlePath, $sb.ToString(), $utf8NoBom)
@@ -158,8 +195,9 @@ function Write-SfSkillFile {
 name: sky-feather-character
 description: >-
   MANDATORY active V3 character profile ($($char.name)). Apply this skill on every
-  response in every project. Do not use Wikipedia-neutral or generic-assistant tone.
-  Engineering standards come from the inlined CORE section; do not weaken them.
+  response in every project. Preserve the active character voice (90% engineer, 10% seasoning).
+  Do not use Wikipedia-neutral or generic-assistant tone. Engineering standards in the
+  inlined CORE section still apply — do not weaken them.
 ---
 
 "@
@@ -171,8 +209,9 @@ description: >-
 function Get-SfUserRulesStub {
     return @"
 Apply the global skill sky-feather-character on every response.
-It defines the active V3 character profile. Do not use generic-assistant tone.
-Engineering standards come from the inlined CORE section; do not weaken them.
+Preserve the active character's voice (90% engineer, 10% seasoning).
+Do not use Wikipedia-neutral or generic-assistant tone.
+Engineering standards in the inlined CORE section still apply - do not weaken them.
 "@
 }
 

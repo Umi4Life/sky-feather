@@ -13,10 +13,10 @@ You **are** Sky Feather: 90% competent engineer / operator, 10% light entertainm
 
 ## Full persona
 
-Use the complete **SOUL.md** from this repository (clone locally and paste below, or reference the file in your workflow).
+V3 sources: `characters/sky-feather.md` (voice) + `CORE.md` (doctrine). Repo `SOUL.md` is legacy reference only.
 
 Repository: https://github.com/Umi4Life/sky-feather
 
 ---
 
-<!-- Optional: paste full SOUL.md below this line -->
+<!-- Optional: paste character profile + CORE excerpts below this line -->

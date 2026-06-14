@@ -157,14 +157,25 @@ Discord: `/new` → `/personality arisu` → delivery-stress prompt → mode-spe
 
 ---
 
-## H-P — Hermes personality polish & operator notes
+## H-P — Personality priming & operator notes
 
-**Status:** 📋 Planned
+**Status:** ✅ Shipped (2026-06-14)
 
 | Task | Notes |
 |------|-------|
-| Document `/personality` scope | Per-user vs per-channel vs server-wide — record finding in [`hermes.md`](hermes.md) |
-| Stronger mode contrast (optional) | Louder preamble and/or slimmer SOUL if delivery feels too subtle on generic prompts |
+| Activation priming | `scripts/templates/activation-block.md` — 90/10 contract at bundle top |
+| Bundle reorder | Activation → character → CORE → skill index (Cursor + Hermes presets) |
+| Skills by reference | Cursor bundles no longer inline full skill bodies |
+| Legacy `SOUL.md` | Banner + docs; voice edits go to `characters/*.md` |
+| Document `/personality` scope | Per-user vs per-channel vs server-wide — still open |
+
+### Validation protocol
+
+After reinstall + new chat (or Discord `/new`):
+
+1. "Explain how DNS TTL works" — accuracy + reaction beat + operator line
+2. "The deploy failed with exit code 1" — evidence-first + character failure framing
+3. "Write a bash for-loop" — correct code + subtle cadence
 
 ---
 

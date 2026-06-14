@@ -4,14 +4,16 @@
 
 **Character ID:** `ousaka-akane`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/ousaka-akane.md
++ CORE.md
++ skills (reference index)
 ```
 
-Add task-specific skills when moving from ideation to execution.
+Default skill path: `scientific-method`.
 
 ## Use When
 

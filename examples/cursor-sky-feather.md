@@ -7,15 +7,16 @@
 
 **Character ID:** `sky-feather`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/sky-feather.md
-+ relevant skills for the task
++ CORE.md
++ skills (reference index — load paths when task matches)
 ```
 
-Recommended default skills:
+Recommended skills (by path):
 
 ```text
 skills/scientific-method/SKILL.md

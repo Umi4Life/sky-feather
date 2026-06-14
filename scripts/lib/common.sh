@@ -281,6 +281,50 @@ sf_hermes_templates_dir() {
   printf '%s/templates' "$(sf_scripts_dir)"
 }
 
+sf_activation_template_path() {
+  printf '%s/activation-block.md' "$(sf_hermes_templates_dir)"
+}
+
+sf_render_activation_block() {
+  local char_id="$1"
+  local name template_path
+  name="$(sf_get_character_field "${char_id}" name)"
+  template_path="$(sf_activation_template_path)"
+  if [[ ! -f "${template_path}" ]]; then
+    echo "error: missing activation template ${template_path}" >&2
+    exit 1
+  fi
+  sed \
+    -e "s/{{CHARACTER_NAME}}/${name}/g" \
+    -e "s/{{CHARACTER_ID}}/${char_id}/g" \
+    "${template_path}"
+}
+
+sf_append_skill_index() {
+  local repo_root="$1"
+  local char_id="$2"
+
+  echo "# Skills (reference only)"
+  echo ""
+  echo "Load when the task matches. Paths are relative to the Sky Feather mirror:"
+  echo ""
+  echo '```text'
+  echo '~/.cursor/sky-feather/skills/<skill>/SKILL.md'
+  echo '```'
+  echo ""
+
+  while IFS= read -r skill; do
+    [[ -z "${skill}" ]] && continue
+    skill_path="${repo_root}/skills/${skill}/SKILL.md"
+    if [[ ! -f "${skill_path}" ]]; then
+      echo "error: missing skill file ${skill_path}" >&2
+      exit 1
+    fi
+    echo "- **${skill}** -> \`~/.cursor/sky-feather/skills/${skill}/SKILL.md\`"
+  done < <(sf_list_character_skills "${char_id}")
+  echo ""
+}
+
 sf_build_bundle_file() {
   local repo_root="$1"
   local output_dir="$2"
@@ -300,9 +344,7 @@ sf_build_bundle_file() {
     echo ""
     echo "---"
     echo ""
-    echo "# CORE (do not weaken)"
-    echo ""
-    cat "${repo_root}/CORE.md"
+    sf_render_activation_block "${char_id}"
     echo ""
     echo "---"
     echo ""
@@ -312,23 +354,13 @@ sf_build_bundle_file() {
     echo ""
     echo "---"
     echo ""
-    echo "# Skills"
+    echo "# CORE (do not weaken)"
     echo ""
-
-    while IFS= read -r skill; do
-      [[ -z "${skill}" ]] && continue
-      skill_path="${repo_root}/skills/${skill}/SKILL.md"
-      if [[ ! -f "${skill_path}" ]]; then
-        echo "error: missing skill file ${skill_path}" >&2
-        exit 1
-      fi
-      echo "## Skill: ${skill}"
-      echo ""
-      cat "${skill_path}"
-      echo ""
-      echo "---"
-      echo ""
-    done < <(sf_list_character_skills "${char_id}")
+    cat "${repo_root}/CORE.md"
+    echo ""
+    echo "---"
+    echo ""
+    sf_append_skill_index "${repo_root}" "${char_id}"
   } > "${bundle_path}"
 
   printf '%s' "${bundle_path}"
@@ -371,8 +403,9 @@ sf_write_skill_file() {
     echo "name: sky-feather-character"
     echo "description: >-"
     echo "  MANDATORY active V3 character profile (${name}). Apply this skill on every"
-    echo "  response in every project. Do not use Wikipedia-neutral or generic-assistant tone."
-    echo "  Engineering standards come from the inlined CORE section; do not weaken them."
+    echo "  response in every project. Preserve the active character voice (90% engineer, 10% seasoning)."
+    echo "  Do not use Wikipedia-neutral or generic-assistant tone. Engineering standards in the"
+    echo "  inlined CORE section still apply — do not weaken them."
     echo "---"
     echo ""
     cat "${bundle_path}"
@@ -382,8 +415,9 @@ sf_write_skill_file() {
 sf_user_rules_stub() {
   cat <<'EOF'
 Apply the global skill sky-feather-character on every response.
-It defines the active V3 character profile. Do not use generic-assistant tone.
-Engineering standards come from the inlined CORE section; do not weaken them.
+Preserve the active character's voice (90% engineer, 10% seasoning).
+Do not use Wikipedia-neutral or generic-assistant tone.
+Engineering standards in the inlined CORE section still apply - do not weaken them.
 EOF
 }
 
@@ -543,6 +577,8 @@ sf_build_hermes_personality_preset() {
   fi
 
   sf_render_hermes_preamble "${char_id}"
+  echo ""
+  sf_render_activation_block "${char_id}"
   echo ""
   cat "${char_path}"
 }

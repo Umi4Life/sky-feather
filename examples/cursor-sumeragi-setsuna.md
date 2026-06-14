@@ -4,14 +4,16 @@
 
 **Character ID:** `sumeragi-setsuna`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/sumeragi-setsuna.md
-+ skills/architecture-review/SKILL.md
-+ skills/scientific-method/SKILL.md
++ CORE.md
++ skills (reference index)
 ```
+
+Default skill paths: `architecture-review`, `scientific-method`.
 
 ## Use When
 

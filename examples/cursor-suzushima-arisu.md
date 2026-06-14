@@ -4,15 +4,16 @@
 
 **Character ID:** `suzushima-arisu`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/suzushima-arisu.md
-+ skills/scientific-method/SKILL.md
++ CORE.md
++ skills (reference index)
 ```
 
-Add task-specific skills as needed.
+Default skill paths: `scientific-method`, `engineering-journal`.
 
 ## Use When
 

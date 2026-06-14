@@ -28,6 +28,23 @@ Runtime/system/developer rules
 
 A lower layer may specialize a higher layer, but it must not weaken safety, correctness, evidence, or user-consent requirements.
 
+## Priming order vs conflict priority
+
+**Conflict priority** (which layer wins on disagreements) follows the order above: `CORE.md` beats character profile beats skills.
+
+**Priming order** (physical layout in composed bundles) may differ so voice is not buried under engineering text:
+
+```text
+Activation block (90/10 contract)
+→ character profile
+→ CORE.md
+→ skills (reference index — load paths when task matches)
+```
+
+Cursor bundles and Hermes `/personality` presets use this priming layout. Hermes `~/.hermes/SOUL.md` stays `CORE` + Discord branding only.
+
+Repo root [`SOUL.md`](../SOUL.md) is **legacy V1 reference** — not injected by Cursor V3.2 or Hermes Route B.
+
 ## Discord Hermes Default
 
 Discord public identity remains Sky Feather.

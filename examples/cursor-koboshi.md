@@ -4,15 +4,16 @@
 
 **Character ID:** `inohara-koboshi`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/inohara-koboshi.md
-+ skills/debugging/SKILL.md
++ CORE.md
++ skills (reference index)
 ```
 
-Add `skills/gsd/SKILL.md` when turning automation ideas into shipped changes.
+Default skill paths: `debugging`, `gsd`.
 
 ## Use When
 

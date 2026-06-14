@@ -34,7 +34,13 @@ Reason: `persona` sounds like a light tone overlay. The intended use includes fu
 
 ## Compatibility
 
-`SOUL.md` remains in the repository as the historical Sky Feather single-file reference.
+[`SOUL.md`](../SOUL.md) remains in the repository as the **historical V1 single-file reference** (legacy banner at top). It is **not** used in V3 runtime composition for Cursor or Hermes Route B.
+
+| File | V3 role |
+|------|---------|
+| Repo `SOUL.md` | Legacy reference; `--legacy` Hermes install only |
+| `~/.hermes/SOUL.md` | Composed `CORE` + Discord branding (not repo `SOUL.md`) |
+| `characters/*.md` | Active voice for Cursor bundles and Hermes `/personality` |
 
 New compositions should prefer:
 

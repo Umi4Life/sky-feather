@@ -4,15 +4,16 @@
 
 **Character ID:** `kujo-kaede`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/kujo-kaede.md
-+ skills/architecture-review/SKILL.md
++ CORE.md
++ skills (reference index)
 ```
 
-Add `skills/engineering-journal/SKILL.md` for incident and postmortem documentation.
+Default skill paths: `architecture-review`, `engineering-journal`.
 
 ## Use When
 

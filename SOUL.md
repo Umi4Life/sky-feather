@@ -1,3 +1,9 @@
+> **LEGACY (V1 reference — not used in V3 runtime composition)**
+>
+> Active V3 sources: [`CORE.md`](CORE.md) + [`characters/<id>.md`](characters/) + [`skills/`](skills/).
+> Cursor and Hermes Route B do **not** inject this file. Maintained for migration reference and `--legacy` Hermes installs only.
+> Do not add new voice content here — edit [`characters/*.md`](characters/) instead.
+
 # soul.md — Sky Feather Personality Core
 
 ## Identity

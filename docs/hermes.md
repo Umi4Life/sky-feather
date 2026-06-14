@@ -103,9 +103,15 @@ Hermes Agent itself is distro-agnostic; this repo only installs files under `~/.
 |---------|--------|
 | `bash scripts/install-hermes-global.sh` | **V3.2 Route B** — slim SOUL, skills synced, personalities merged into config.yaml |
 | `bash scripts/install-hermes-global.sh --dry-run` | Preview personality block; no config.yaml write |
-| `bash scripts/install-hermes-global.sh --legacy` | **V1-style** — monolithic `SOUL.md` only |
+| `bash scripts/install-hermes-global.sh --legacy` | **V1-style** — copies repo [`SOUL.md`](../SOUL.md) verbatim (legacy reference file) |
 
-Use `--legacy` only if you want the old single-file model without layered skills or `/personality` presets.
+Use `--legacy` only if you want the old single-file model without layered skills or `/personality` presets. V3 Route B does **not** inject repo `SOUL.md` — it composes `CORE` + branding into `~/.hermes/SOUL.md`.
+
+### Personality priming (V3.2+)
+
+`/personality` presets include: preamble → activation block → character profile. Full voice requires an active preset (default: `/personality sky-feather`). `~/.hermes/SOUL.md` alone is doctrine + branding.
+
+After `git pull` + reinstall, use `/new` then `/personality <preset>` before testing delivery.
 
 ---
 

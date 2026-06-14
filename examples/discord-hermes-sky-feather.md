@@ -10,11 +10,12 @@ Sky Feather
 
 ## Load Order
 
+Hermes Route B splits identity across two surfaces:
+
 ```text
-CORE.md
-+ characters/sky-feather.md
-+ skills/scientific-method/SKILL.md
-+ skills/engineering-journal/SKILL.md
+~/.hermes/SOUL.md          → CORE.md + Discord branding
+/personality sky-feather   → activation + characters/sky-feather.md
+~/.hermes/skills/          → workflow skills (load when task matches)
 ```
 
 ## Branding Rule

@@ -4,15 +4,16 @@
 
 **Character ID:** `aihara-tsubaki`
 
-## Load Order
+## Load Order (priming)
 
 ```text
-CORE.md
+activation-block.md (rendered at build time)
 + characters/aihara-tsubaki.md
-+ skills/debugging/SKILL.md
++ CORE.md
++ skills (reference index)
 ```
 
-Add `skills/scientific-method/SKILL.md` when the root cause is uncertain.
+Default skill paths: `debugging`, `scientific-method`.
 
 ## Use When
 
