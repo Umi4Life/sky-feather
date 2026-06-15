@@ -27,7 +27,7 @@ fi
 
 cp "${BUNDLE}" "${MIRROR}/active-bundle.md"
 sf_write_manifest "${MIRROR}" "${CHAR_ID}"
-sf_write_skill_file "${CHAR_ID}" "${MIRROR}/active-bundle.md" "${SKILL_DIR}"
+sf_write_skill_file "${CHAR_ID}" "${MIRROR}/active-bundle.md" "${SKILL_DIR}" "${MIRROR}/skill-drops/${CHAR_ID}.md"
 
 NAME="$(sf_get_character_field "${CHAR_ID}" name)"
 echo "Switched active character to: ${NAME} (${CHAR_ID})"

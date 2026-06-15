@@ -110,6 +110,12 @@ After pasting, start a **new** Cursor chat.
 
 ## Switch character
 
+**Windows — lite copy (fewest permission issues):**
+
+```cmd
+%USERPROFILE%\.cursor\sky-feather\bin\switch-character-lite.cmd setsuna
+```
+
 **Preferred — global script (any workspace):**
 
 ```powershell
@@ -132,7 +138,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.cursor\sk
 .\scripts\switch-character.ps1 setsuna
 ```
 
-`/character` slash command uses the global path. Agents must **not** edit switch scripts if a run fails — re-run `install-cursor-global` instead.
+`/character` slash command: agent **reads** the bundle for in-chat voice (no sandbox write), then optionally **writes** `skill-drops/<id>.md` → global skill via the Write tool — not Shell. User terminal fallback: `switch-character-lite.cmd <id>`.
 
 Character IDs and aliases: [cursor-quickstart.md](cursor-quickstart.md#character-ids).
 
@@ -239,7 +245,8 @@ Scripts cannot edit Cursor User Rules. After uninstall:
 | Rules ignored | Full SOUL still in User Rules | Replace User Rules with thin stub only |
 | Wrong / missing character files | Stale mirror | Re-run `install-cursor-global` |
 | `git status` noise in team repos | `.cursor/rules/sky-feather-soul.mdc` in repo | `uninstall --repo-rules <path>` or delete manually |
-| Windows script blocked | ExecutionPolicy | Use `.cmd` wrappers, or `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
+| Windows script blocked | ExecutionPolicy | Use `.cmd` wrappers (`switch-character-lite.cmd`), or `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
+| `/character` asks permission or denied | Agent sandbox blocks shell writes to `~/.cursor/` | Agent should **read** bundle (in-chat voice) and **Write** skill-drop — see `commands/character.md`. User fallback: `switch-character-lite.cmd <id>` |
 | bash alias resolution fails | `jq` not installed | Install `jq`, or use PowerShell scripts on Windows |
 
 ---

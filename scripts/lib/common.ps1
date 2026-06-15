@@ -24,7 +24,7 @@ function Sync-SfGlobalBin {
     $binDir = Get-SfGlobalBinDir
     New-Item -ItemType Directory -Force -Path $binDir | Out-Null
 
-    foreach ($name in @('switch-character.ps1', 'switch-character.cmd', 'switch-character.sh')) {
+    foreach ($name in @('switch-character.ps1', 'switch-character.cmd', 'switch-character.sh', 'switch-character-lite.cmd')) {
         $src = Join-Path $RepoScriptsDir $name
         if (Test-Path $src) {
             Copy-Item $src (Join-Path $binDir $name) -Force
@@ -168,9 +168,14 @@ function Build-SfAllBundles {
         [Parameter(Mandatory)][string]$OutputDir,
         [string]$MirrorHome = '~/.cursor/sky-feather'
     )
+    $mirrorRoot = Split-Path $OutputDir -Parent
+    $skillDropsDir = Join-Path $mirrorRoot 'skill-drops'
+    $claudeDropsDir = Join-Path $mirrorRoot 'claude-drops'
     $config = Get-SfCharactersConfig
     foreach ($char in $config.characters) {
-        Build-SfBundleFile -RepoRoot $RepoRoot -OutputDir $OutputDir -CharacterId $char.id -MirrorHome $MirrorHome | Out-Null
+        $bundlePath = Build-SfBundleFile -RepoRoot $RepoRoot -OutputDir $OutputDir -CharacterId $char.id -MirrorHome $MirrorHome
+        Write-SfSkillDropFile -CharacterId $char.id -BundlePath $bundlePath -OutputDir $skillDropsDir | Out-Null
+        Write-SfClaudeDropFile -CharacterId $char.id -BundlePath $bundlePath -OutputDir $claudeDropsDir | Out-Null
     }
 }
 
@@ -188,29 +193,73 @@ function Write-SfManifest {
     $manifest | ConvertTo-Json | Set-Content (Join-Path $MirrorDir 'manifest.json') -Encoding utf8
 }
 
-function Write-SfSkillFile {
-    param(
-        [Parameter(Mandatory)][string]$CharacterId,
-        [Parameter(Mandatory)][string]$BundlePath,
-        [Parameter(Mandatory)][string]$SkillDir
-    )
-    $char = Get-SfCharacterById -Id $CharacterId
-    New-Item -ItemType Directory -Force -Path $SkillDir | Out-Null
+function Get-SfSkillFrontmatter {
+    param([Parameter(Mandatory)][string]$CharacterName)
 
-    $frontmatter = @"
+    return @"
 ---
 name: sky-feather-character
 description: >-
-  MANDATORY active V3 character profile ($($char.name)). Apply this skill on every
+  MANDATORY active V3 character profile ($CharacterName). Apply this skill on every
   response in every project. Preserve the active character voice (90% engineer, 10% seasoning).
   Do not use Wikipedia-neutral or generic-assistant tone. Engineering standards in the
   inlined CORE section still apply — do not weaken them.
 ---
 
 "@
+}
+
+function Write-SfSkillDropFile {
+    param(
+        [Parameter(Mandatory)][string]$CharacterId,
+        [Parameter(Mandatory)][string]$BundlePath,
+        [Parameter(Mandatory)][string]$OutputDir
+    )
+
+    $char = Get-SfCharacterById -Id $CharacterId
+    New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+    $dropPath = Join-Path $OutputDir "$CharacterId.md"
     $body = Get-Content $BundlePath -Raw
     $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-    [System.IO.File]::WriteAllText((Join-Path $SkillDir 'SKILL.md'), ($frontmatter + $body), $utf8NoBom)
+    [System.IO.File]::WriteAllText($dropPath, ((Get-SfSkillFrontmatter -CharacterName $char.name) + $body), $utf8NoBom)
+    return $dropPath
+}
+
+function Write-SfClaudeDropFile {
+    param(
+        [Parameter(Mandatory)][string]$CharacterId,
+        [Parameter(Mandatory)][string]$BundlePath,
+        [Parameter(Mandatory)][string]$OutputDir
+    )
+
+    New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+    $dropPath = Join-Path $OutputDir "$CharacterId.md"
+    $body = Get-Content $BundlePath -Raw
+    $content = (Get-SfManagedClaudeHeader) + "`n`n" + $body
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($dropPath, $content, $utf8NoBom)
+    return $dropPath
+}
+
+function Write-SfSkillFile {
+    param(
+        [Parameter(Mandatory)][string]$CharacterId,
+        [Parameter(Mandatory)][string]$BundlePath,
+        [Parameter(Mandatory)][string]$SkillDir,
+        [string]$SkillDropPath = ''
+    )
+    $char = Get-SfCharacterById -Id $CharacterId
+    New-Item -ItemType Directory -Force -Path $SkillDir | Out-Null
+    $skillPath = Join-Path $SkillDir 'SKILL.md'
+
+    if ($SkillDropPath -and (Test-Path $SkillDropPath)) {
+        Copy-Item $SkillDropPath $skillPath -Force
+        return
+    }
+
+    $body = Get-Content $BundlePath -Raw
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($skillPath, ((Get-SfSkillFrontmatter -CharacterName $char.name) + $body), $utf8NoBom)
 }
 
 function Get-SfUserRulesStub {
@@ -243,11 +292,18 @@ function Get-SfManagedClaudeHeader {
 
 function Write-SfClaudeFile {
     param(
-        [Parameter(Mandatory)][string]$BundlePath
+        [Parameter(Mandatory)][string]$BundlePath,
+        [string]$ClaudeDropPath = ''
     )
 
     $claudeMd = Get-SfClaudeMdPath
     New-Item -ItemType Directory -Force -Path (Get-SfClaudeHome) | Out-Null
+
+    if ($ClaudeDropPath -and (Test-Path $ClaudeDropPath)) {
+        Copy-Item $ClaudeDropPath $claudeMd -Force
+        return
+    }
+
     $content = (Get-SfManagedClaudeHeader) + "`n`n" + (Get-Content $BundlePath -Raw)
     $utf8NoBom = New-Object System.Text.UTF8Encoding $false
     [System.IO.File]::WriteAllText($claudeMd, $content, $utf8NoBom)
@@ -266,7 +322,7 @@ function Sync-SfClaudeGlobalBin {
     $binDir = Get-SfClaudeGlobalBinDir
     New-Item -ItemType Directory -Force -Path $binDir | Out-Null
 
-    foreach ($name in @('switch-claude-character.ps1', 'switch-claude-character.cmd', 'switch-claude-character.sh')) {
+    foreach ($name in @('switch-claude-character.ps1', 'switch-claude-character.cmd', 'switch-claude-character.sh', 'switch-claude-character-lite.cmd')) {
         $src = Join-Path $RepoScriptsDir $name
         if (Test-Path $src) {
             Copy-Item $src (Join-Path $binDir $name) -Force

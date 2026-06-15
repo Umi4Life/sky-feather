@@ -33,7 +33,7 @@ sf_sync_global_bin() {
   bin_dir="$(sf_global_bin_dir)"
   mkdir -p "${bin_dir}"
 
-  for name in switch-character.sh switch-character.ps1 switch-character.cmd; do
+  for name in switch-character.sh switch-character.ps1 switch-character.cmd switch-character-lite.cmd; do
     if [[ -f "${repo_scripts_dir}/${name}" ]]; then
       cp "${repo_scripts_dir}/${name}" "${bin_dir}/${name}"
     fi
@@ -377,9 +377,14 @@ sf_build_all_bundles() {
   local repo_root="$1"
   local output_dir="$2"
   local mirror_home="${3:-~/.cursor/sky-feather}"
-  local id
+  local mirror_root skill_drops_dir claude_drops_dir id bundle_path
+  mirror_root="$(dirname "${output_dir}")"
+  skill_drops_dir="${mirror_root}/skill-drops"
+  claude_drops_dir="${mirror_root}/claude-drops"
   while IFS= read -r id; do
-    sf_build_bundle_file "${repo_root}" "${output_dir}" "${id}" "${mirror_home}"
+    bundle_path="$(sf_build_bundle_file "${repo_root}" "${output_dir}" "${id}" "${mirror_home}")"
+    sf_write_skill_drop_file "${id}" "${bundle_path}" "${skill_drops_dir}" >/dev/null
+    sf_write_claude_drop_file "${id}" "${bundle_path}" "${claude_drops_dir}" >/dev/null
   done < <(sf_list_character_ids)
 }
 
@@ -398,23 +403,67 @@ sf_write_manifest() {
 EOF
 }
 
+sf_skill_frontmatter() {
+  local name="$1"
+  cat <<EOF
+---
+name: sky-feather-character
+description: >-
+  MANDATORY active V3 character profile (${name}). Apply this skill on every
+  response in every project. Preserve the active character voice (90% engineer, 10% seasoning).
+  Do not use Wikipedia-neutral or generic-assistant tone. Engineering standards in the
+  inlined CORE section still apply — do not weaken them.
+---
+EOF
+}
+
+sf_write_skill_drop_file() {
+  local char_id="$1"
+  local bundle_path="$2"
+  local output_dir="$3"
+  local name drop_path
+  name="$(sf_get_character_field "${char_id}" name)"
+  mkdir -p "${output_dir}"
+  drop_path="${output_dir}/${char_id}.md"
+  {
+    sf_skill_frontmatter "${name}"
+    echo ""
+    cat "${bundle_path}"
+  } > "${drop_path}"
+  printf '%s' "${drop_path}"
+}
+
+sf_write_claude_drop_file() {
+  local char_id="$1"
+  local bundle_path="$2"
+  local output_dir="$3"
+  local drop_path
+  mkdir -p "${output_dir}"
+  drop_path="${output_dir}/${char_id}.md"
+  {
+    sf_managed_claude_header
+    echo ""
+    cat "${bundle_path}"
+  } > "${drop_path}"
+  printf '%s' "${drop_path}"
+}
+
 sf_write_skill_file() {
   local char_id="$1"
   local bundle_path="$2"
   local skill_dir="$3"
+  local skill_drop_path="${4:-}"
   local name
   name="$(sf_get_character_field "${char_id}" name)"
 
   mkdir -p "${skill_dir}"
+  if [[ -n "${skill_drop_path}" && -f "${skill_drop_path}" ]]; then
+    cp "${skill_drop_path}" "${skill_dir}/SKILL.md"
+    return 0
+  fi
+
   {
-    echo "---"
-    echo "name: sky-feather-character"
-    echo "description: >-"
-    echo "  MANDATORY active V3 character profile (${name}). Apply this skill on every"
-    echo "  response in every project. Preserve the active character voice (90% engineer, 10% seasoning)."
-    echo "  Do not use Wikipedia-neutral or generic-assistant tone. Engineering standards in the"
-    echo "  inlined CORE section still apply — do not weaken them."
-    echo "---"
+    sf_skill_frontmatter "${name}"
     echo ""
     cat "${bundle_path}"
   } > "${skill_dir}/SKILL.md"
@@ -970,10 +1019,16 @@ sf_managed_claude_header() {
 
 sf_write_claude_file() {
   local bundle_path="$1"
+  local claude_drop_path="${2:-}"
   local claude_md
   claude_md="$(sf_claude_md_path)"
 
   mkdir -p "$(sf_claude_home)"
+  if [[ -n "${claude_drop_path}" && -f "${claude_drop_path}" ]]; then
+    cp "${claude_drop_path}" "${claude_md}"
+    return 0
+  fi
+
   {
     sf_managed_claude_header
     echo ""
@@ -995,7 +1050,7 @@ sf_sync_claude_global_bin() {
   bin_dir="$(sf_claude_global_bin_dir)"
   mkdir -p "${bin_dir}"
 
-  for name in switch-claude-character.sh switch-claude-character.ps1 switch-claude-character.cmd; do
+  for name in switch-claude-character.sh switch-claude-character.ps1 switch-claude-character.cmd switch-claude-character-lite.cmd; do
     if [[ -f "${repo_scripts_dir}/${name}" ]]; then
       cp "${repo_scripts_dir}/${name}" "${bin_dir}/${name}"
     fi

@@ -90,9 +90,17 @@ Cursor loads full profiles via the global V3.2 install. See [cursor.md](cursor.m
 
 ### Switch command
 
+**In Cursor chat:** `/character <id>` — agent reads bundle for immediate in-chat voice (no shell). Optional Write to `skill-drops` for persistence.
+
+**Windows terminal (lite, recommended):**
+
+```cmd
+%USERPROFILE%\.cursor\sky-feather\bin\switch-character-lite.cmd <id-or-alias>
+```
+
 ```bash
 # macOS / Linux / Git Bash
-./scripts/switch-character.sh <character-id-or-alias>
+"$HOME/.cursor/sky-feather/bin/switch-character.sh" <character-id-or-alias>
 ```
 
 ```powershell
@@ -113,6 +121,14 @@ Claude Code loads full profiles via the global V3.2 install. See [claude-code.md
 Claude uses an **independent** mirror (`~/.claude/sky-feather/`) — active character may differ from Cursor.
 
 ### Switch command
+
+**In Claude Code:** `/character <id>` — reads bundle for in-chat voice; optional Write to `claude-drops` for persistence.
+
+**Windows terminal (lite, recommended):**
+
+```cmd
+%USERPROFILE%\.claude\sky-feather\bin\switch-claude-character-lite.cmd <id-or-alias>
+```
 
 ```bash
 # macOS / Linux / Git Bash

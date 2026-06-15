@@ -19,7 +19,8 @@ if (-not (Test-Path $bundle)) {
 $activeBundle = Join-Path $mirror 'active-bundle.md'
 Copy-Item $bundle $activeBundle -Force
 Write-SfManifest -MirrorDir $mirror -ActiveId $charId
-Write-SfClaudeFile -BundlePath $activeBundle
+$claudeDrop = Join-Path $mirror 'claude-drops' "$charId.md"
+Write-SfClaudeFile -BundlePath $activeBundle -ClaudeDropPath $claudeDrop
 
 $char = Get-SfCharacterById -Id $charId
 Write-Host "Switched active character to: $($char.name) ($charId)"

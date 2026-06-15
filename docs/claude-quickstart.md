@@ -7,7 +7,8 @@ One-page cheat sheet for Sky Feather V3.2 global Claude Code setup. Full guide: 
 | Action | macOS / Linux / Git Bash | Windows PowerShell | Windows cmd |
 |--------|--------------------------|--------------------|-------------|
 | Install | `./scripts/install-claude-global.sh` | `.\scripts\install-claude-global.ps1` | `scripts\install-claude-global.cmd` |
-| Switch (any workspace) | `"$HOME/.claude/sky-feather/bin/switch-claude-character.sh" <id>` | `powershell -File "$env:USERPROFILE\.claude\sky-feather\bin\switch-claude-character.ps1" <id>` | `%USERPROFILE%\.claude\sky-feather\bin\switch-claude-character.cmd <id>` |
+| Switch (any workspace) | `"$HOME/.claude/sky-feather/bin/switch-claude-character.sh" <id>` | `powershell -File "$env:USERPROFILE\.claude\sky-feather\bin\switch-claude-character.ps1" <id>` | `%USERPROFILE%\.claude\sky-feather\bin\switch-claude-character-lite.cmd <id>` |
+| In session | `/character <id>` (read bundle + optional Write; no shell) | same | same |
 | Update | `git pull && ./scripts/install-claude-global.sh` | `git pull; .\scripts\install-claude-global.ps1` | `git pull` then `scripts\install-claude-global.cmd` |
 | Uninstall (preview) | `./scripts/uninstall-claude-global.sh --dry-run` | `.\scripts\uninstall-claude-global.ps1 -DryRun` | `scripts\uninstall-claude-global.cmd -DryRun` |
 | Uninstall | `./scripts/uninstall-claude-global.sh` | `.\scripts\uninstall-claude-global.ps1` | `scripts\uninstall-claude-global.cmd` |

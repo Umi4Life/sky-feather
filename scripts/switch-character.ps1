@@ -20,7 +20,8 @@ if (-not (Test-Path $bundle)) {
 $activeBundle = Join-Path $mirror 'active-bundle.md'
 Copy-Item $bundle $activeBundle -Force
 Write-SfManifest -MirrorDir $mirror -ActiveId $charId
-Write-SfSkillFile -CharacterId $charId -BundlePath $activeBundle -SkillDir $skillDir
+$skillDrop = Join-Path $mirror 'skill-drops' "$charId.md"
+Write-SfSkillFile -CharacterId $charId -BundlePath $activeBundle -SkillDir $skillDir -SkillDropPath $skillDrop
 
 $char = Get-SfCharacterById -Id $charId
 Write-Host "Switched active character to: $($char.name) ($charId)"

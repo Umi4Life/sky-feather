@@ -94,6 +94,12 @@ After install, start a **new** Claude Code session.
 
 ### Script (recommended)
 
+**Windows — lite copy (fewest permission issues):**
+
+```cmd
+%USERPROFILE%\.claude\sky-feather\bin\switch-claude-character-lite.cmd setsuna
+```
+
 **Preferred — global script (any workspace):**
 
 ```powershell
@@ -122,7 +128,9 @@ After switching, start a **new** Claude Code session for reliable application.
 
 ### In-CLI (`/character` skill)
 
-Type `/character setsuna` (or `/character` and Claude asks which id). The skill runs the global switch script, reads `~/.claude/CLAUDE.md`, and adopts the new voice for the rest of the thread.
+Type `/character setsuna` (or `/character` and Claude asks which id).
+
+The skill **reads** the bundle for in-chat voice immediately (no sandbox write). To persist for new sessions, it **writes** `claude-drops/<id>.md` → `CLAUDE.md` via the Write tool — not Shell (avoids permission prompts). If writes are declined, in-chat voice still works.
 
 Mid-chat switching is **best-effort** — prior messages may still carry the old voice. New session is still recommended.
 
