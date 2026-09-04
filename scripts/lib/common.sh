@@ -536,21 +536,6 @@ sf_backup_hermes_soul() {
   echo "Backed up existing SOUL.md → ${backup_path}"
 }
 
-sf_backup_hermes_config() {
-  local config_path backup_dir stamp backup_path
-  config_path="$(sf_hermes_config_path)"
-  backup_dir="$(sf_hermes_backups_dir)"
-
-  if [[ ! -f "${config_path}" ]]; then
-    return 0
-  fi
-
-  mkdir -p "${backup_dir}"
-  stamp="$(date -u +"%Y%m%dT%H%M%SZ")"
-  backup_path="${backup_dir}/config.yaml.${stamp}"
-  cp "${config_path}" "${backup_path}"
-  echo "Backed up existing config.yaml → ${backup_path}"
-}
 
 sf_warn_hermes_content_size() {
   local label="$1"
@@ -579,7 +564,118 @@ sf_render_hermes_preamble() {
     "${template}"
 }
 
-# Hermes install identity: CORE + Discord branding only (modes via /personality).
+sf_hermes_character_skills_dir() {
+  printf '%s/sky-feather-characters' "$(sf_hermes_skills_dir)"
+}
+
+sf_get_character_aliases_csv() {
+  local id="$1"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r --arg id "${id}" '.characters[] | select(.id == $id) | (.aliases // []) | join(", ")' "$(sf_characters_json)" 2>/dev/null
+    return 0
+  fi
+  python3 - "${id}" "$(sf_characters_json)" <<'PY'
+import json, sys
+with open(sys.argv[2], encoding="utf-8") as f:
+    data = json.load(f)
+for c in data.get("characters", []):
+    if c.get("id") == sys.argv[1]:
+        print(", ".join(c.get("aliases", [])))
+        sys.exit(0)
+sys.exit(1)
+PY
+}
+
+sf_hermes_character_reference_file() {
+  local repo_root="$1"
+  local char_id="$2"
+  local skill_key ref_dir ref_path
+  skill_key="$(sf_get_character_personality_key "${char_id}")"
+  ref_dir="$(sf_hermes_character_skills_dir)/character/references"
+  ref_path="${ref_dir}/${skill_key}.md"
+  mkdir -p "${ref_dir}"
+  {
+    sf_render_hermes_preamble "${char_id}"
+    echo ""
+    sf_render_activation_block "${char_id}"
+    echo ""
+    cat "${repo_root}/$(sf_get_character_field "${char_id}" file)"
+  } > "${ref_path}"
+  printf '%s' "${ref_path}"
+}
+
+sf_build_hermes_character_skill_file() {
+  local repo_root="$1"
+  local skill_dir skill_path char_id skill_key aliases label
+  skill_dir="$(sf_hermes_character_skills_dir)/character"
+  skill_path="${skill_dir}/SKILL.md"
+  mkdir -p "${skill_dir}"
+  {
+    cat <<'EOF'
+---
+name: character
+description: Use when switching Sky Feather delivery mode / character. Invoke `/skill character <key-or-alias>` (e.g. setsuna, kaede, ops, architect).
+tags: [sky-feather, character, personality, delivery-mode]
+---
+
+# Sky Feather character switch
+
+Switch the active Sky Feather delivery mode. Public Discord branding always stays **Sky Feather**; the other characters are internal delivery modes (use labels like `Sky Feather: Architect Mode`, never "I am now Setsuna").
+
+## Resolver
+
+| Key | Aliases | Discord label | Profile |
+|-----|---------|---------------|---------|
+EOF
+    while IFS= read -r char_id; do
+      skill_key="$(sf_get_character_personality_key "${char_id}")"
+      aliases="$(sf_get_character_aliases_csv "${char_id}")"
+      label="$(sf_hermes_discord_label "${char_id}")"
+      echo "| ${skill_key} | ${aliases} | ${label} | references/${skill_key}.md |"
+    done < <(sf_list_character_ids)
+    cat <<'EOF'
+
+## Instructions
+
+1. Read the character the user named after `/skill character` (e.g. `setsuna`, `ops`, `architect`).
+2. Match it to a **Key** above (exact key or any alias, case-insensitive).
+3. Load the profile: `skill_view(name='character', file_path='references/<key>.md')`.
+4. Adopt that character's delivery for the rest of this session. CORE doctrine (SOUL.md) still applies to safety, evidence, correctness, and consent.
+5. If no character was given or it doesn't match, default to `sky-feather`.
+EOF
+  } > "${skill_path}"
+  printf '%s' "${skill_path}"
+}
+
+sf_install_hermes_character_skills() {
+  local repo_root="$1"
+  local char_id ref_path skill_path
+  skill_path="$(sf_build_hermes_character_skill_file "${repo_root}")"
+  echo "  ${skill_path}"
+  while IFS= read -r char_id; do
+    ref_path="$(sf_hermes_character_reference_file "${repo_root}" "${char_id}")"
+    echo "  ${ref_path}"
+  done < <(sf_list_character_ids)
+}
+
+sf_write_hermes_character_skills_index() {
+  local mirror_dir="$1"
+  local out="${mirror_dir}/character-skills-index.md"
+  local char_id skill_key label
+  {
+    echo "# Sky Feather character switch"
+    echo "# Switch with: /skill character <key>"
+    echo "#"
+    echo "# Key → Discord label"
+  } > "${out}"
+  while IFS= read -r char_id; do
+    skill_key="$(sf_get_character_personality_key "${char_id}")"
+    label="$(sf_hermes_discord_label "${char_id}")"
+    echo "#   /skill character ${skill_key} → ${label}" >> "${out}"
+  done < <(sf_list_character_ids)
+}
+
+# Hermes install identity: CORE + Discord branding only (modes via /skill character).
 sf_build_hermes_soul_core_file() {
   local repo_root="$1"
   local output_path="$2"
@@ -614,7 +710,8 @@ sf_build_hermes_soul_core_file() {
     echo ""
     echo "Workflow skills are installed under \`~/.hermes/skills/\`."
     echo "Load them when the task matches (scientific-method, engineering-journal, debugging, etc.)."
-    echo "Delivery modes: use \`/personality <preset>\` in Discord (sky-feather, setsuna, tsubaki, arisu, akane, kaede, koboshi)."
+    echo "Character delivery modes: use \`/skill character <key>\` in Discord (sky-feather, setsuna, tsubaki, arisu, akane, kaede, koboshi)."
+    echo "Character profiles live under \`~/.hermes/skills/sky-feather-characters/character/references/<key>.md\`."
   } > "${output_path}"
 
   sf_warn_hermes_content_size "composed SOUL.md" "${output_path}"
@@ -640,225 +737,6 @@ sf_build_hermes_personality_preset() {
   cat "${char_path}"
 }
 
-sf_personalities_marker_start() {
-  printf '%s' '# --- sky-feather:personalities:start (generated; do not edit) ---'
-}
-
-sf_personalities_marker_end() {
-  printf '%s' '# --- sky-feather:personalities:end ---'
-}
-
-_sf_indent_yaml_literal_body() {
-  sed 's/^/      /'
-}
-
-sf_generate_hermes_personalities_yaml() {
-  local repo_root="$1"
-  local output_path="$2"
-  local char_id preset_key preset_tmp size max
-
-  mkdir -p "$(dirname "${output_path}")"
-  preset_tmp="$(mktemp)"
-
-  {
-    sf_personalities_marker_start
-  } > "${output_path}"
-
-  while IFS= read -r char_id; do
-    preset_key="$(sf_get_character_personality_key "${char_id}")"
-    sf_build_hermes_personality_preset "${repo_root}" "${char_id}" > "${preset_tmp}"
-    size="$(wc -c < "${preset_tmp}" | tr -d ' ')"
-    max="$(sf_hermes_soul_max_chars)"
-    if [[ "${size}" -gt "${max}" ]]; then
-      echo "warning: personality preset '${preset_key}' is ${size} bytes (may truncate at ~${max})" >&2
-    fi
-    {
-      echo "    ${preset_key}: |"
-      _sf_indent_yaml_literal_body < "${preset_tmp}"
-    } >> "${output_path}"
-  done < <(sf_list_character_ids)
-
-  echo "$(sf_personalities_marker_end)" >> "${output_path}"
-  rm -f "${preset_tmp}"
-}
-
-sf_validate_hermes_config_personalities() {
-  local config_path="$1"
-  local agent_count preset_count
-
-  if [[ ! -f "${config_path}" ]]; then
-    echo "warning: missing Hermes config: ${config_path}" >&2
-    return 0
-  fi
-
-  agent_count="$(grep -c '^agent:[[:space:]]*$' "${config_path}" || true)"
-  if [[ "${agent_count}" -ne 1 ]]; then
-    echo "warning: expected exactly 1 root 'agent:' in ${config_path}, found ${agent_count}" >&2
-    echo "warning: duplicate agent: keys can cause Hermes to ignore Sky Feather /personality presets" >&2
-  fi
-
-  preset_count="$(grep -cE '^[[:space:]]{4}(sky-feather|setsuna|tsubaki|arisu|akane|kaede|koboshi):' "${config_path}" || true)"
-  if [[ "${preset_count}" -lt 7 ]]; then
-    echo "warning: expected 7 Sky Feather personality presets in ${config_path}, found ${preset_count}" >&2
-  fi
-}
-
-sf_merge_hermes_personalities() {
-  local repo_root="$1"
-  local dry_run="${2:-0}"
-  local generated config_path mirror_dir block_tmp py
-
-  mirror_dir="$(sf_hermes_mirror)"
-  generated="${mirror_dir}/personalities.generated.yaml"
-  config_path="$(sf_hermes_config_path)"
-  block_tmp="$(mktemp)"
-
-  sf_generate_hermes_personalities_yaml "${repo_root}" "${generated}"
-  cp "${generated}" "${block_tmp}"
-
-  if [[ "${dry_run}" -eq 1 ]]; then
-    echo "Dry-run: would merge personalities into ${config_path}"
-    echo "Generated block ($(sf_hermes_mirror)/personalities.generated.yaml):"
-    cat "${block_tmp}"
-    rm -f "${block_tmp}"
-    return 0
-  fi
-
-  for py in python3 python; do
-    command -v "${py}" >/dev/null 2>&1 || continue
-    "${py}" - "${config_path}" "${block_tmp}" <<'PY'
-import re
-import sys
-
-config_path, block_path = sys.argv[1], sys.argv[2]
-
-START = "# --- sky-feather:personalities:start (generated; do not edit) ---"
-END = "# --- sky-feather:personalities:end ---"
-LEGACY_WARNING = "# WARNING: sky-feather personalities appended"
-
-
-def read_text(path: str) -> str:
-    try:
-        with open(path, encoding="utf-8") as f:
-            return f.read()
-    except OSError:
-        return ""
-
-
-def strip_agent_wrapper(block: str) -> str:
-    lines = []
-    for line in block.splitlines():
-        stripped = line.strip()
-        if stripped in ("agent:", "personalities:"):
-            continue
-        lines.append(line)
-    return "\n".join(lines).strip("\n")
-
-
-def extract_marker_block(text: str) -> str:
-    if START not in text or END not in text:
-        return strip_agent_wrapper(text)
-    _, rest = text.split(START, 1)
-    body, _ = rest.split(END, 1)
-    return strip_agent_wrapper(body)
-
-
-def remove_marker_block(text: str) -> str:
-    if START not in text or END not in text:
-        return text
-    before, rest = text.split(START, 1)
-    _, after = rest.split(END, 1)
-    return before + after
-
-
-def remove_legacy_append(text: str) -> str:
-    if LEGACY_WARNING not in text:
-        return text
-    warning_idx = text.index(LEGACY_WARNING)
-    if START in text[warning_idx:]:
-        end_idx = text.index(END, warning_idx) + len(END)
-        tail = text[end_idx:].lstrip("\n")
-        return text[:warning_idx].rstrip() + ("\n\n" + tail if tail else "\n")
-    return text[:warning_idx].rstrip() + "\n"
-
-
-def remove_duplicate_root_agent_blocks(text: str) -> str:
-    matches = list(re.finditer(r"^agent:\s*$", text, re.MULTILINE))
-    if len(matches) <= 1:
-        return text
-    # Drop later root-level agent: sections (old installer appended a second block).
-    second = matches[1].start()
-    return text[:second].rstrip() + "\n"
-
-
-def wrap_presets(preset_body: str) -> str:
-    body = preset_body.strip("\n")
-    if not body:
-        return ""
-    return f"{START}\n{body}\n{END}\n"
-
-
-def insert_under_personalities(text: str, preset_block: str) -> str:
-    text = text.rstrip() + "\n"
-    agent_match = re.search(r"^agent:\s*$", text, re.MULTILINE)
-    if not agent_match:
-        return f"agent:\n  personalities:\n{preset_block}"
-
-    after_agent = text[agent_match.end() :]
-    pers_match = re.search(r"^  personalities:\s*$", after_agent, re.MULTILINE)
-    if not pers_match:
-        insert_at = agent_match.end()
-        return text[:insert_at] + "\n  personalities:\n" + preset_block + text[insert_at:]
-
-    insert_at = agent_match.end() + pers_match.end()
-    return text[:insert_at] + "\n" + preset_block + text[insert_at:]
-
-
-new_block = wrap_presets(extract_marker_block(read_text(block_path)))
-if not new_block.strip():
-    raise SystemExit("error: generated personalities block is empty")
-
-config = read_text(config_path)
-config = remove_legacy_append(config)
-config = remove_marker_block(config)
-config = remove_duplicate_root_agent_blocks(config)
-merged = insert_under_personalities(config, new_block)
-
-agent_roots = len(re.findall(r"^agent:\s*$", merged, re.MULTILINE))
-if agent_roots != 1:
-    print(
-        f"warning: expected 1 root agent: key after merge, found {agent_roots}",
-        file=sys.stderr,
-    )
-
-with open(config_path, "w", encoding="utf-8", newline="\n") as f:
-    f.write(merged if merged.endswith("\n") else merged + "\n")
-PY
-    rm -f "${block_tmp}"
-    sf_validate_hermes_config_personalities "${config_path}"
-    return 0
-  done
-
-  rm -f "${block_tmp}"
-  echo "error: python3 required to merge config.yaml personalities" >&2
-  exit 1
-}
-
-sf_install_hermes_personalities() {
-  local repo_root="$1"
-  local dry_run="${2:-0}"
-
-  if [[ "${dry_run}" -eq 0 ]]; then
-    sf_backup_hermes_config
-  fi
-
-  sf_merge_hermes_personalities "${repo_root}" "${dry_run}"
-
-  if [[ "${dry_run}" -eq 0 ]]; then
-    echo "Merged agent.personalities → $(sf_hermes_config_path)"
-    echo "Debug copy: $(sf_hermes_mirror)/personalities.generated.yaml"
-  fi
-}
 
 # Hermes identity: CORE + character only (skills live under ~/.hermes/skills/).
 sf_build_hermes_soul_file() {
@@ -938,29 +816,6 @@ sf_write_hermes_manifest() {
 EOF
 }
 
-sf_write_hermes_personalities_example() {
-  local repo_root="$1"
-  local mirror_dir="$2"
-  local out="${mirror_dir}/personalities.example.yaml"
-  local char_id preset_key label
-
-  {
-    echo "# Reference only — install writes ~/.hermes/config.yaml automatically."
-    echo "# Switch at runtime with: /personality <preset-key>"
-    echo "# Full generated block: ~/.hermes/sky-feather/personalities.generated.yaml"
-    echo "#"
-    echo "# Preset keys (short aliases):"
-  } > "${out}"
-
-  while IFS= read -r char_id; do
-    preset_key="$(sf_get_character_personality_key "${char_id}")"
-    label="$(sf_hermes_discord_label "${char_id}")"
-    echo "#   ${preset_key} → ${label}" >> "${out}"
-  done < <(sf_list_character_ids)
-
-  echo "#" >> "${out}"
-  echo "# Regenerate preset body: bash scripts/switch-hermes-character.sh <alias> --preset-only" >> "${out}"
-}
 
 sf_print_hermes_next_steps() {
   local active_char="${1:-sky-feather}"
@@ -969,30 +824,30 @@ sf_print_hermes_next_steps() {
 Hermes V3.2 (Route B) installed.
 
   Identity:  $(sf_hermes_soul_path)  (CORE + branding; slim SOUL)
-  Config:    $(sf_hermes_config_path)  (agent.personalities presets)
   Mirror:    $(sf_hermes_mirror)/
   Skills:    $(sf_hermes_skills_dir)/
+  Characters: $(sf_hermes_character_skills_dir)/
   Manifest:  ${active_char} ($(sf_hermes_discord_label "${active_char}"))
 
-Discord mode switch (primary):
-  /personality sky-feather
-  /personality setsuna
-  /personality tsubaki
-  /personality arisu
-  /personality akane
-  /personality kaede
-  /personality koboshi
+Discord character switch (/skill character <key>):
+  /skill character sky-feather
+  /skill character setsuna
+  /skill character tsubaki
+  /skill character arisu
+  /skill character akane
+  /skill character kaede
+  /skill character koboshi
 
 Next steps:
   1. Restart Hermes (service or gateway) once so SOUL.md reloads
-  2. In Discord: /personality sky-feather (default) or another preset above
-  3. Personality changes do not require gateway restart
+  2. In Discord: /skill character sky-feather (default) or another key above
+  3. Character skill changes do not require gateway restart
   4. Legacy server-wide SOUL switch: bash scripts/switch-hermes-character.sh <alias>
 
 Future upgrades (after git pull in this repo):
   bash scripts/install-hermes-global.sh
 
-Backups: $(sf_hermes_backups_dir)/ (SOUL.md and config.yaml if any existed)
+Backups: $(sf_hermes_backups_dir)/ (SOUL.md if any existed)
 EOF
 }
 

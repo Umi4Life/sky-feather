@@ -1,11 +1,11 @@
 # Install Sky Feather on Hermes Agent
 
-Hermes loads personality from a **global identity file** and optional **runtime presets**:
+Hermes loads personality from a **global identity file** and a **character switch skill**:
 
 ```text
-~/.hermes/SOUL.md              ← CORE + Discord branding (slim identity)
-~/.hermes/config.yaml          ← agent.personalities (mode overlays)
-~/.hermes/skills/              ← workflow skills
+~/.hermes/SOUL.md                                    ← CORE + Discord branding (slim identity)
+~/.hermes/skills/                                    ← workflow skills
+~/.hermes/skills/sky-feather-characters/character/     ← character switch skill (profiles in `references/`)
 ```
 
 (or `$HERMES_HOME/...`)
@@ -15,11 +15,11 @@ Sky Feather V3.2 Route B maps onto Hermes as:
 | V3 layer | Hermes surface |
 |----------|----------------|
 | `CORE.md` + Discord branding | Composed `~/.hermes/SOUL.md` (no character voice in SOUL) |
-| `characters/<id>.md` per mode | `agent.personalities` presets in `config.yaml` |
+| `characters/<id>.md` per mode | `~/.hermes/skills/sky-feather-characters/character/references/<key>.md` |
 | `skills/*/SKILL.md` | `~/.hermes/skills/<name>/SKILL.md` |
-| Discord mode switch | `/personality <preset-key>` |
+| Discord mode switch | `/skill character <key>` |
 
-Workflow skills stay **out of** `SOUL.md` so the identity file stays under Hermes's ~20k character cap.
+Workflow and character skills stay **out of** `SOUL.md` so the identity file stays under Hermes's ~20k character cap.
 
 ---
 
@@ -43,7 +43,7 @@ cd sky-feather
 # Optional: deploy clones only — ignore chmod-only git noise on git pull
 git config core.fileMode false
 
-# 2. Install V3.2 Route B (backs up existing SOUL.md and config.yaml)
+# 2. Install V3.2 Route B (backs up existing SOUL.md)
 bash scripts/install-hermes-global.sh
 
 # 3. Restart Hermes (SOUL reload)
@@ -59,8 +59,7 @@ What the installer does:
 2. Mirrors repo content to `~/.hermes/sky-feather/` (local source tree + `manifest.json`)
 3. Writes **slim SOUL** (CORE + Discord branding) → `~/.hermes/SOUL.md`
 4. Syncs all `skills/` → `~/.hermes/skills/`
-5. Generates and merges `agent.personalities` into `~/.hermes/config.yaml` (marker-based merge)
-6. Writes debug copy → `~/.hermes/sky-feather/personalities.generated.yaml`
+5. Installs the `character` switch skill → `~/.hermes/skills/sky-feather-characters/character/SKILL.md` (+ `references/<key>.md`)
 
 ### Future upgrades
 
@@ -68,16 +67,10 @@ What the installer does:
 cd ~/sky-feather   # or wherever you cloned
 git pull
 bash scripts/install-hermes-global.sh
-sudo systemctl restart hermes-gateway   # SOUL changes only; personalities apply without restart
+sudo systemctl restart hermes-gateway   # SOUL changes only; character switches apply without restart
 ```
 
 No more hand-copying `SOUL.md`.
-
-Preview personality merge without writing config:
-
-```bash
-bash scripts/install-hermes-global.sh --dry-run
-```
 
 ---
 
@@ -89,7 +82,7 @@ The Hermes install scripts are **bash** and target common server Linux (Ubuntu, 
 |------|-----------|--------|
 | `bash` | Yes | Usually preinstalled |
 | `git` | For clone/pull upgrades | |
-| `python3` | Yes (Route B) | Config.yaml marker merge |
+| `python3` | Route B fallback | Character alias lookup |
 | `jq` | Optional | Faster JSON parsing; scripts fall back without it |
 | `grep`, `sed`, `cp` | Yes | Standard on minimal installs |
 
@@ -101,26 +94,25 @@ Hermes Agent itself is distro-agnostic; this repo only installs files under `~/.
 
 | Command | Result |
 |---------|--------|
-| `bash scripts/install-hermes-global.sh` | **V3.2 Route B** — slim SOUL, skills synced, personalities merged into config.yaml |
-| `bash scripts/install-hermes-global.sh --dry-run` | Preview personality block; no config.yaml write |
+| `bash scripts/install-hermes-global.sh` | **V3.2 Route B** — slim SOUL, workflow skills synced, character skills installed |
 | `bash scripts/install-hermes-global.sh --legacy` | **V1-style** — copies repo [`SOUL.md`](../SOUL.md) verbatim (legacy reference file) |
 
-Use `--legacy` only if you want the old single-file model without layered skills or `/personality` presets. V3 Route B does **not** inject repo `SOUL.md` — it composes `CORE` + branding into `~/.hermes/SOUL.md`.
+Use `--legacy` only if you want the old single-file model without layered skills. V3 Route B does **not** inject repo `SOUL.md` — it composes `CORE` + branding into `~/.hermes/SOUL.md`.
 
-### Personality priming (V3.2+)
+### Character skill priming (V3.2+)
 
-`/personality` presets include: preamble → activation block → character profile. Full voice requires an active preset (default: `/personality sky-feather`). `~/.hermes/SOUL.md` alone is doctrine + branding.
+Character references include: preamble → activation block → character profile. Full voice requires an active switch (default: `/skill character sky-feather`). `~/.hermes/SOUL.md` alone is doctrine + branding.
 
-After `git pull` + reinstall, use `/new` then `/personality <preset>` before testing delivery.
+After `git pull` + reinstall, use `/new` then `/skill character <key>` before testing delivery.
 
 ---
 
 ## Switch character / mode in Discord (primary)
 
-Public Discord branding stays **Sky Feather**. Other profiles are delivery modes via Hermes `/personality`:
+Public Discord branding stays **Sky Feather**. Other profiles are delivery modes via `/skill character <key>`:
 
-| Preset key | Character | Public Discord label |
-|------------|-----------|----------------------|
+| Key | Character | Public Discord label |
+|-----------|-----------|----------------------|
 | `sky-feather` | Sky Feather | Sky Feather |
 | `setsuna` | Sumeragi Setsuna | Sky Feather: Architect Mode |
 | `tsubaki` | Aihara Tsubaki | Sky Feather: Pair-Programming Mode |
@@ -130,34 +122,34 @@ Public Discord branding stays **Sky Feather**. Other profiles are delivery modes
 | `koboshi` | Inohara Koboshi | Sky Feather: Automation Mode |
 
 ```text
-/personality sky-feather    # default Sky Feather delivery
-/personality setsuna        # Architect Mode
-/personality kaede          # Ops Mode
+/skill character sky-feather    # default Sky Feather delivery
+/skill character setsuna        # Architect Mode
+/skill character kaede          # Ops Mode
 ```
 
-Personality changes **do not require** gateway restart. SOUL.md changes do.
+Character switches **do not require** gateway restart. SOUL.md changes do.
 
-### `/personality` scope
+### `/skill character` scope
 
-> **Operator note:** Confirm on your gateway whether `/personality` applies per-user, per-channel, or server-wide, and record the finding here after VM validation.
+> **Operator note:** Confirm on your gateway whether `/skill character` applies per-user, per-channel, or server-wide, and record the finding here after VM validation.
 
-Built-in Hermes presets (`helpful`, `concise`, `kawaii`, etc.) remain available; Sky Feather presets use distinct short keys above to avoid collisions.
+Built-in Hermes presets (`helpful`, `concise`, `kawaii`, etc.) remain available; the Sky Feather `character` skill takes the short key above as its argument.
 
 ---
 
 ## Legacy server-wide SOUL switch (ops)
 
-Rewrites `~/.hermes/SOUL.md` with full CORE + character for the **entire gateway** until switched back. Prefer `/personality` for Discord mode changes.
+Rewrites `~/.hermes/SOUL.md` with full CORE + character for the **entire gateway** until switched back. Prefer `/skill character <key>` for Discord mode changes.
 
 ```bash
 bash scripts/switch-hermes-character.sh setsuna
 sudo systemctl restart hermes-gateway
 ```
 
-Print Discord preset key without writing SOUL:
+Print the Discord key without writing SOUL:
 
 ```bash
-bash scripts/switch-hermes-character.sh setsuna --personality-only
+bash scripts/switch-hermes-character.sh setsuna --skill-key
 ```
 
 **There is no in-Discord `/hermes character` command yet** (Route C — see [roadmap.md](roadmap.md)).
@@ -172,12 +164,12 @@ Matches [examples/discord-hermes-sky-feather.md](../examples/discord-hermes-sky-
 
 ```text
 CORE.md + Discord branding     → ~/.hermes/SOUL.md
-characters/sky-feather.md      → /personality sky-feather preset
-skills/scientific-method/...     → ~/.hermes/skills/
-skills/engineering-journal/...   → ~/.hermes/skills/
+characters/sky-feather.md      → ~/.hermes/skills/sky-feather-characters/character/references/sky-feather.md
+skills/scientific-method/...   → ~/.hermes/skills/
+skills/engineering-journal/... → ~/.hermes/skills/
 ```
 
-Identity doctrine lives in slim `SOUL.md`. Default voice and other modes come from `/personality` presets.
+Identity doctrine lives in slim `SOUL.md`. Default voice and other modes come from `/skill character <key>`.
 
 ---
 
@@ -186,40 +178,30 @@ Identity doctrine lives in slim `SOUL.md`. Default voice and other modes come fr
 After `git pull && bash scripts/install-hermes-global.sh` on the Hermes VM:
 
 ```bash
-test -f ~/.hermes/config.yaml
-grep -q 'sky-feather:personalities:start' ~/.hermes/config.yaml
-test "$(grep -c '^agent:[[:space:]]*$' ~/.hermes/config.yaml)" -eq 1   # must be exactly 1
 head -20 ~/.hermes/SOUL.md   # CORE + branding; not full Setsuna voice
-grep -E '^[[:space:]]{4}(sky-feather|setsuna|tsubaki|arisu|akane|kaede|koboshi):' ~/.hermes/config.yaml
-test -f ~/.hermes/sky-feather/personalities.generated.yaml
-bash scripts/install-hermes-global.sh --dry-run
+test -f ~/.hermes/skills/sky-feather-characters/character/SKILL.md
+test -f ~/.hermes/skills/sky-feather-characters/character/references/setsuna.md
+ls ~/.hermes/skills/sky-feather-characters/character/references/   # should list 7 keys
+test -f ~/.hermes/sky-feather/manifest.json
 ```
 
 Manual Discord checks:
 
-- `/personality setsuna` → Architect delivery, public Sky Feather branding
-- `/personality sky-feather` → default Sky Feather delivery
+- `/skill character setsuna` → Architect delivery, public Sky Feather branding
+- `/skill character sky-feather` → default Sky Feather delivery
 - Same technical question across modes → same engineering conclusion, different tone
 
-### Troubleshooting: `unknown personality: setsuna`
+### Troubleshooting: skill not recognized
 
-Usually means Hermes did not load Sky Feather presets from `agent.personalities`.
-
-1. **Check for duplicate root `agent:` keys** (common after first Route B install on an existing VM):
+1. **Confirm skill files exist:**
 
    ```bash
-   grep -n '^agent:' ~/.hermes/config.yaml
+   ls ~/.hermes/skills/sky-feather-characters/
    ```
 
-   Must be **exactly one** `agent:` at the root. If you see two, re-run install after `git pull` (merge fix consolidates under the first `agent.personalities`).
+   Should show: `sky-feather  setsuna  tsubaki  arisu  akane  kaede  koboshi`
 
-2. **Confirm presets sit under `agent.personalities`**, not in a second `agent:` block:
-
-   ```bash
-   sed -n '/^agent:/,/^[^ #]/p' ~/.hermes/config.yaml | head -40
-   ```
-
-3. **Re-apply merge and restart gateway** (SOUL + config reload):
+2. **Re-run install and restart gateway:**
 
    ```bash
    cd ~/sky-feather && git pull
@@ -227,7 +209,7 @@ Usually means Hermes did not load Sky Feather presets from `agent.personalities`
    sudo systemctl restart hermes-gateway
    ```
 
-4. **Built-in presets still work?** Try `/personality helpful`. If built-ins work but `setsuna` does not, the custom block is not in the active `agent.personalities` map.
+3. **Skill resolves?** Try `/skill character setsuna`. If it fails, Hermes may not be scanning `~/.hermes/skills/sky-feather-characters/` — check gateway skill scan path config.
 
 ---
 
@@ -242,7 +224,7 @@ sudo -u hermes HERMES_HOME=/home/hermes/.hermes bash /home/hermes/sky-feather/sc
 Verify with:
 
 ```bash
-ls -la ~/.hermes/SOUL.md ~/.hermes/config.yaml ~/.hermes/sky-feather/manifest.json
+ls -la ~/.hermes/SOUL.md ~/.hermes/sky-feather/manifest.json
 ```
 
 ---

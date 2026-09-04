@@ -1,46 +1,41 @@
 #!/usr/bin/env bash
-# Switch active Sky Feather character on Hermes (~/.hermes/SOUL.md).
-# Legacy ops path — prefer /personality <preset> in Discord (Route B).
+# Switch active Sky Feather character on Hermes.
+# Primary switch: /skill character <key> in Discord (no restart needed).
+# Legacy ops path: rewrites ~/.hermes/SOUL.md server-wide (requires restart).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 
-PRESET_ONLY=0
-PERSONALITY_ONLY=0
+SKILL_KEY_ONLY=0
 CHAR_INPUT=""
 REPO_ROOT="$(sf_repo_root)"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --preset-only)
-      PRESET_ONLY=1
-      shift
-      ;;
-    --personality-only)
-      PERSONALITY_ONLY=1
+    --skill-key)
+      SKILL_KEY_ONLY=1
       shift
       ;;
     -h|--help)
       cat <<EOF
-Usage: $0 <character-id-or-alias> [--preset-only | --personality-only] [REPO_ROOT]
+Usage: $0 <character-id-or-alias> [--skill-key] [REPO_ROOT]
 
-Legacy: regenerate ~/.hermes/SOUL.md with full CORE + character (server-wide).
-Requires: sudo systemctl restart hermes-gateway
-
-Preferred Discord switch (Route B):
-  /personality <preset-key>
-  Example: /personality setsuna
+Primary Discord switch (no restart required):
+  /skill character <key>
+  Example: /skill character setsuna
 
 Options:
-  --personality-only   Print /personality preset key for Discord (no SOUL write)
-  --preset-only        Write personality preset body to mirror presets/ (debug)
+  --skill-key   Print the /skill character key for Discord without writing SOUL.md
+
+Legacy server-wide SOUL switch (requires gateway restart):
+  $0 setsuna
+  sudo systemctl restart hermes-gateway
 
 Examples:
-  $0 setsuna --personality-only
+  $0 setsuna --skill-key
   $0 kaede
-  $0 sky-feather --preset-only
 EOF
       exit 0
       ;;
@@ -63,7 +58,7 @@ fi
 CHAR_ID="$(sf_resolve_character_id "${CHAR_INPUT}")"
 MIRROR="$(sf_hermes_mirror)"
 SOUL_PATH="$(sf_hermes_soul_path)"
-PRESET_KEY="$(sf_get_character_personality_key "${CHAR_ID}")"
+SKILL_KEY="$(sf_get_character_personality_key "${CHAR_ID}")"
 DISCORD_LABEL="$(sf_hermes_discord_label "${CHAR_ID}")"
 
 if [[ ! -d "${MIRROR}" ]]; then
@@ -72,18 +67,10 @@ if [[ ! -d "${MIRROR}" ]]; then
   exit 1
 fi
 
-if [[ "${PERSONALITY_ONLY}" -eq 1 ]]; then
-  echo "Use /personality ${PRESET_KEY} in Discord"
+if [[ "${SKILL_KEY_ONLY}" -eq 1 ]]; then
+  echo "Use /skill character ${SKILL_KEY} in Discord"
   echo "  Label: ${DISCORD_LABEL}"
   echo "  Character id: ${CHAR_ID}"
-  exit 0
-fi
-
-if [[ "${PRESET_ONLY}" -eq 1 ]]; then
-  mkdir -p "${MIRROR}/presets"
-  sf_build_hermes_personality_preset "${REPO_ROOT}" "${CHAR_ID}" > "${MIRROR}/presets/${CHAR_ID}.md"
-  echo "Wrote preset body → ${MIRROR}/presets/${CHAR_ID}.md"
-  echo "Preset key: ${PRESET_KEY}"
   exit 0
 fi
 
@@ -97,4 +84,4 @@ echo ""
 echo "Legacy server-wide SOUL switch — restart Hermes:"
 echo "  sudo systemctl restart hermes-gateway"
 echo ""
-echo "Preferred: /personality ${PRESET_KEY} in Discord (no restart required)"
+echo "Preferred: /skill character ${SKILL_KEY} in Discord (no restart required)"
