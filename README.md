@@ -147,7 +147,7 @@ See [docs/runtime-composition.md](docs/runtime-composition.md) for composition r
 | [scripts/switch-claude-character.sh](scripts/switch-claude-character.sh) | Switch active global Claude Code character profile |
 | [scripts/uninstall-cursor-global.sh](scripts/uninstall-cursor-global.sh) | Uninstall / prune global Cursor artifacts |
 | [scripts/uninstall-claude-global.sh](scripts/uninstall-claude-global.sh) | Uninstall / prune global Claude Code artifacts |
-| [scripts/install-hermes-global.sh](scripts/install-hermes-global.sh) | Install on Hermes (`~/.hermes/SOUL.md` + skills) |
+| [scripts/install-hermes-global.sh](scripts/install-hermes-global.sh) | Install on Hermes (`~/.hermes/SOUL.md` + skills + character skills) |
 
 ---
 
@@ -155,7 +155,7 @@ See [docs/runtime-composition.md](docs/runtime-composition.md) for composition r
 
 Discord Hermes stays publicly branded as **Sky Feather**. Other profiles act as internal mode inspiration — use labels like `Sky Feather: Architect Mode`, not casual identity swaps (`I am now Setsuna.`).
 
-Preset keys, public labels, and switching rules: [docs/character-switching.md](docs/character-switching.md). Default composition: [examples/discord-hermes-sky-feather.md](examples/discord-hermes-sky-feather.md).
+Switch with `/skill character <key>` in Discord (e.g. `/skill character setsuna`). Keys, public labels, and switching rules: [docs/character-switching.md](docs/character-switching.md). Default composition: [examples/discord-hermes-sky-feather.md](examples/discord-hermes-sky-feather.md).
 
 ---
 

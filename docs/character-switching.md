@@ -4,7 +4,7 @@
 
 Support two different usage models:
 
-1. **Discord Hermes:** public identity remains Sky Feather; modes via `/personality <preset>`.
+1. **Discord Hermes:** public identity remains Sky Feather; modes via `/skill character <key>`.
 2. **Cursor / coding agents:** full character profiles can be selected directly.
 
 ## Discord Hermes Branding Rule
@@ -37,12 +37,12 @@ Sky Feather: Ops Mode
 Sky Feather: Automation Mode
 ```
 
-## Discord Hermes — `/personality` presets (primary)
+## Discord Hermes — `/skill character` switching (primary)
 
-Install writes presets to `~/.hermes/config.yaml`. Switch modes in Discord with Hermes `/personality`:
+Install writes a single `character` skill to `~/.hermes/skills/sky-feather-characters/character/` (full profiles under `references/`). Switch modes in Discord with `/skill character <key>`:
 
-| Preset key | Character id | Public Discord label |
-|------------|--------------|----------------------|
+| Key | Character id | Public Discord label |
+|-----------|--------------|----------------------|
 | `sky-feather` | `sky-feather` | Sky Feather |
 | `setsuna` | `sumeragi-setsuna` | Sky Feather: Architect Mode |
 | `tsubaki` | `aihara-tsubaki` | Sky Feather: Pair-Programming Mode |
@@ -52,14 +52,14 @@ Install writes presets to `~/.hermes/config.yaml`. Switch modes in Discord with 
 | `koboshi` | `inohara-koboshi` | Sky Feather: Automation Mode |
 
 ```text
-/personality sky-feather
-/personality setsuna
-/personality kaede
+/skill character sky-feather
+/skill character setsuna
+/skill character kaede
 ```
 
-No gateway restart required for personality changes. See [hermes.md](hermes.md) for install and upgrades.
+No gateway restart required for character switches. See [hermes.md](hermes.md) for install and upgrades.
 
-Character **aliases** (`feather`, `architect`, `ops`, …) still work for bash switch scripts; `/personality` uses **preset keys** only.
+Character **aliases** (`feather`, `architect`, `ops`, …) also work as the `/skill character` argument and for bash switch scripts.
 
 ## Discord Hermes — legacy server-wide switch (ops)
 
@@ -70,10 +70,10 @@ bash scripts/switch-hermes-character.sh <id-or-alias>
 sudo systemctl restart hermes-gateway
 ```
 
-Prefer `/personality` for Discord. Print preset key without touching SOUL:
+Prefer `/skill character <key>` for Discord. Print the key without touching SOUL:
 
 ```bash
-bash scripts/switch-hermes-character.sh setsuna --personality-only
+bash scripts/switch-hermes-character.sh setsuna --skill-key
 ```
 
 ### Future in-Discord syntax (Route C — not shipped)
@@ -172,7 +172,7 @@ Proceed with Architect Mode?
 
 ## Character Selection Guide
 
-| Work type | Suggested profile | Public Discord label | `/personality` key |
+| Work type | Suggested profile | Public Discord label | `/skill character` key |
 |---|---|---|---|
 | General engineering | Sky Feather | Sky Feather | `sky-feather` |
 | Architecture review | Sumeragi Setsuna | Sky Feather: Architect Mode | `setsuna` |
