@@ -21,7 +21,7 @@ Usage: $0 [--legacy] [REPO_ROOT]
 
 Install Sky Feather on Hermes Agent.
 
-  Default (V3.2 Route B): slim SOUL (CORE + branding), sync workflow skills,
+  Default (V3.2 Route B): SOUL (default character voice + CORE + branding), sync workflow skills,
                           install the character switch skill under ~/.hermes/skills/sky-feather-characters/character/.
   --legacy:              copy monolithic SOUL.md only (V1-style drop-in).
 
@@ -47,7 +47,7 @@ DEFAULT_CHAR="$(sf_json_default_character)"
 echo "Installing Sky Feather on Hermes"
 echo "  Repo:        ${REPO_ROOT}"
 echo "  HERMES_HOME: ${HERMES_HOME}"
-echo "  Mode:        $([[ "${LEGACY}" -eq 1 ]] && echo 'legacy SOUL.md' || echo 'V3.2 Route B (slim SOUL + character skills)')"
+echo "  Mode:        $([[ "${LEGACY}" -eq 1 ]] && echo 'legacy SOUL.md' || echo 'V3.2 Route B (SOUL = default voice + CORE; character skills)')"
 
 sf_backup_hermes_soul
 
@@ -83,7 +83,7 @@ if [[ -n "${existing}" ]]; then
   ACTIVE_CHAR="${existing}"
 fi
 
-sf_build_hermes_soul_core_file "${REPO_ROOT}" "${SOUL_PATH}"
+sf_build_hermes_soul_core_file "${REPO_ROOT}" "${SOUL_PATH}" "${ACTIVE_CHAR}"
 cp "${SOUL_PATH}" "${MIRROR}/active-soul.md"
 sf_write_hermes_manifest "${MIRROR}" "${ACTIVE_CHAR}"
 

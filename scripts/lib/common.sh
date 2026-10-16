@@ -675,11 +675,20 @@ sf_write_hermes_character_skills_index() {
   done < <(sf_list_character_ids)
 }
 
-# Hermes install identity: CORE + Discord branding only (modes via /skill character).
+# Hermes install identity: default character voice + CORE + Discord branding.
+# Other modes layer on top per session via /skill character <key>.
 sf_build_hermes_soul_core_file() {
   local repo_root="$1"
   local output_path="$2"
-  local branding_template
+  local char_id="${3:-$(sf_json_default_character)}"
+  local branding_template name file
+
+  name="$(sf_get_character_field "${char_id}" name)"
+  file="$(sf_get_character_field "${char_id}" file)"
+  if [[ ! -f "${repo_root}/${file}" ]]; then
+    echo "error: missing character file ${repo_root}/${file}" >&2
+    exit 1
+  fi
 
   branding_template="$(sf_hermes_templates_dir)/hermes-soul-branding.md"
   if [[ ! -f "${branding_template}" ]]; then
@@ -693,6 +702,17 @@ sf_build_hermes_soul_core_file() {
     echo "# Sky Feather V3 — Hermes Identity"
     echo ""
     echo "Public Discord label: $(sf_hermes_discord_label sky-feather)"
+    echo "Default character ID: \`${char_id}\`"
+    echo ""
+    echo "---"
+    echo ""
+    sf_render_activation_block "${char_id}"
+    echo ""
+    echo "---"
+    echo ""
+    echo "# Character: ${name}"
+    echo ""
+    cat "${repo_root}/${file}"
     echo ""
     echo "---"
     echo ""
@@ -710,7 +730,7 @@ sf_build_hermes_soul_core_file() {
     echo ""
     echo "Workflow skills are installed under \`~/.hermes/skills/\`."
     echo "Load them when the task matches (scientific-method, engineering-journal, debugging, etc.)."
-    echo "Character delivery modes: use \`/skill character <key>\` in Discord (sky-feather, setsuna, tsubaki, arisu, akane, kaede, koboshi)."
+    echo "Other character delivery modes: use \`/skill character <key>\` in Discord to switch for the current session (setsuna, tsubaki, arisu, akane, kaede, koboshi; sky-feather returns to the default)."
     echo "Character profiles live under \`~/.hermes/skills/sky-feather-characters/character/references/<key>.md\`."
   } > "${output_path}"
 

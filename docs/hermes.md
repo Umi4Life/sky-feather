@@ -3,7 +3,7 @@
 Hermes loads personality from a **global identity file** and a **character switch skill**:
 
 ```text
-~/.hermes/SOUL.md                                    ← CORE + Discord branding (slim identity)
+~/.hermes/SOUL.md                                    ← default character voice + CORE + Discord branding
 ~/.hermes/skills/                                    ← workflow skills
 ~/.hermes/skills/sky-feather-characters/character/     ← character switch skill (profiles in `references/`)
 ```
@@ -14,12 +14,12 @@ Sky Feather V3.2 Route B maps onto Hermes as:
 
 | V3 layer | Hermes surface |
 |----------|----------------|
-| `CORE.md` + Discord branding | Composed `~/.hermes/SOUL.md` (no character voice in SOUL) |
+| Default character + `CORE.md` + Discord branding | Composed `~/.hermes/SOUL.md` (activation block → default character profile → CORE → branding) |
 | `characters/<id>.md` per mode | `~/.hermes/skills/sky-feather-characters/character/references/<key>.md` |
 | `skills/*/SKILL.md` | `~/.hermes/skills/<name>/SKILL.md` |
 | Discord mode switch | `/skill character <key>` |
 
-Workflow and character skills stay **out of** `SOUL.md` so the identity file stays under Hermes's ~20k character cap.
+Only the default character (`characters.json` `default`, or the mirror manifest's `active`) is composed into `SOUL.md`, so its voice applies to every session without a switch, matching the Claude Code `CLAUDE.md` install. Workflow skills and the other characters stay **out of** `SOUL.md` so the identity file stays under Hermes's ~20k character cap (about 15k with the default `sky-feather` profile).
 
 ---
 
@@ -57,7 +57,7 @@ What the installer does:
 
 1. Backs up your current `~/.hermes/SOUL.md` → `~/.hermes/backups/SOUL.md.<timestamp>`
 2. Mirrors repo content to `~/.hermes/sky-feather/` (local source tree + `manifest.json`)
-3. Writes **slim SOUL** (CORE + Discord branding) → `~/.hermes/SOUL.md`
+3. Writes **SOUL** (activation block + default character profile + CORE + Discord branding) → `~/.hermes/SOUL.md`
 4. Syncs all `skills/` → `~/.hermes/skills/`
 5. Installs the `character` switch skill → `~/.hermes/skills/sky-feather-characters/character/SKILL.md` (+ `references/<key>.md`)
 
@@ -94,16 +94,16 @@ Hermes Agent itself is distro-agnostic; this repo only installs files under `~/.
 
 | Command | Result |
 |---------|--------|
-| `bash scripts/install-hermes-global.sh` | **V3.2 Route B** — slim SOUL, workflow skills synced, character skills installed |
+| `bash scripts/install-hermes-global.sh` | **V3.2 Route B** — SOUL with default voice + CORE, workflow skills synced, character skills installed |
 | `bash scripts/install-hermes-global.sh --legacy` | **V1-style** — copies repo [`SOUL.md`](../SOUL.md) verbatim (legacy reference file) |
 
-Use `--legacy` only if you want the old single-file model without layered skills. V3 Route B does **not** inject repo `SOUL.md` — it composes `CORE` + branding into `~/.hermes/SOUL.md`.
+Use `--legacy` only if you want the old single-file model without layered skills. V3 Route B does **not** inject repo `SOUL.md` — it composes the default character, `CORE`, and branding into `~/.hermes/SOUL.md`.
 
 ### Character skill priming (V3.2+)
 
-Character references include: preamble → activation block → character profile. Full voice requires an active switch (default: `/skill character sky-feather`). `~/.hermes/SOUL.md` alone is doctrine + branding.
+Character references include: preamble → activation block → character profile. The default character's voice is always active from `~/.hermes/SOUL.md`; `/skill character <key>` layers another mode on top for the current session.
 
-After `git pull` + reinstall, use `/new` then `/skill character <key>` before testing delivery.
+After `git pull` + reinstall + gateway restart, use `/new` before testing delivery. The default voice should be present with no switch.
 
 ---
 
@@ -122,7 +122,7 @@ Public Discord branding stays **Sky Feather**. Other profiles are delivery modes
 | `koboshi` | Inohara Koboshi | Sky Feather: Automation Mode |
 
 ```text
-/skill character sky-feather    # default Sky Feather delivery
+/skill character sky-feather    # back to default Sky Feather delivery (already active from SOUL.md)
 /skill character setsuna        # Architect Mode
 /skill character kaede          # Ops Mode
 ```
@@ -163,13 +163,13 @@ See [character-switching.md](character-switching.md) for the full mode table and
 Matches [examples/discord-hermes-sky-feather.md](../examples/discord-hermes-sky-feather.md):
 
 ```text
-CORE.md + Discord branding     → ~/.hermes/SOUL.md
+default character + CORE.md + Discord branding → ~/.hermes/SOUL.md
 characters/sky-feather.md      → ~/.hermes/skills/sky-feather-characters/character/references/sky-feather.md
 skills/scientific-method/...   → ~/.hermes/skills/
 skills/engineering-journal/... → ~/.hermes/skills/
 ```
 
-Identity doctrine lives in slim `SOUL.md`. Default voice and other modes come from `/skill character <key>`.
+Default voice and identity doctrine live in `SOUL.md`. Other modes come from `/skill character <key>`.
 
 ---
 
@@ -178,7 +178,8 @@ Identity doctrine lives in slim `SOUL.md`. Default voice and other modes come fr
 After `git pull && bash scripts/install-hermes-global.sh` on the Hermes VM:
 
 ```bash
-head -20 ~/.hermes/SOUL.md   # CORE + branding; not full Setsuna voice
+head -30 ~/.hermes/SOUL.md   # activation block for the default character (sky-feather), then its profile
+wc -c ~/.hermes/SOUL.md      # under 20000
 test -f ~/.hermes/skills/sky-feather-characters/character/SKILL.md
 test -f ~/.hermes/skills/sky-feather-characters/character/references/setsuna.md
 ls ~/.hermes/skills/sky-feather-characters/character/references/   # should list 7 keys
@@ -188,7 +189,8 @@ test -f ~/.hermes/sky-feather/manifest.json
 Manual Discord checks:
 
 - `/skill character setsuna` → Architect delivery, public Sky Feather branding
-- `/skill character sky-feather` → default Sky Feather delivery
+- `/new`, no switch → default Sky Feather delivery from SOUL.md
+- `/skill character sky-feather` → back to default Sky Feather delivery
 - Same technical question across modes → same engineering conclusion, different tone
 
 ### Troubleshooting: skill not recognized
